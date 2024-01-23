@@ -1,0 +1,256 @@
+#####################################################################
+# Author: ┬  ┬ ┬┬┌─┌─┐┬ ┬┌─┐╦╔╦╗
+#         │  │ │├┴┐├┤ │││├─┤║ ║
+#         ┴─┘└─┘┴ ┴└─┘└┴┘┴ ┴╩ ╩
+# Email: lukewait@outlook.com
+# Date: January 22, 2024
+# GitHub Repository: https://github.com/LukeWait/custom_starship.toml
+
+# Fonts: Nerd fonts - https://www.nerdfonts.com/
+#                     https://www.nerdfonts.com/cheat-sheet
+
+# BORDER CUSTOMIZATION SYMBOLS
+#                  
+#####################################################################
+
+
+# Prompt constructor
+format = """
+[░▒▓](fg:color_user_git)\
+[ ](bg:color_user_git)\
+$os\
+$username\
+[ ](bg:color_ip fg:color_user_git)\
+$localip\
+[ ](fg:color_dir bg:color_ip)\
+$directory\
+[](fg:color_dir)\
+
+$line_break\
+
+[░▒▓](fg:color_user_git)\
+[ ](bg:color_user_git)\
+$git_branch\
+$git_status\
+[](fg:color_user_git bg:color_virt_env)\
+$python\
+[](fg:color_virt_env bg:color_lang)\
+$c\
+$elixir\
+$elm\
+$golang\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+$scala\
+[](fg:color_lang bg:color_docker)\
+$docker_context\
+[ ](fg:color_docker)\
+"""
+
+# If a prompt takes longer than 5s to execute it will be terminated
+command_timeout = 5000
+
+# Provides a blank line at the start of the prompt
+add_newline = true
+
+# Select the palette to be used
+palette = 'dark'
+
+# Can add additional palettes for easy switching
+[palettes.dark]
+color_text      = '#f8f8ff'
+color_ip        = '#2e3440'
+color_user_git  = '#3b4252'
+color_virt_env  = '#434c5e'
+color_lang      = '#4c566a'
+color_docker    = '#5e81ac'
+color_dir       = '#6272a4'
+
+
+# FIRST LINE -----------------------------
+[os]
+style = "bg:color_user_git fg:color_text"
+disabled = false
+
+[os.symbols]
+Alpaquita = "🔔 "
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = "󰣇 "
+Artix = "󰣇 "
+CentOS = " "
+Debian = "󰣚 "
+DragonFly = "🐉 "
+Emscripten = "🔗 "
+EndeavourOS = " "
+Fedora = "󰣛 "
+FreeBSD = " "
+Garuda = " "
+Gentoo = "󰣨 "
+HardenedBSD = "🛡️ "
+Illumos = " "
+Linux = "󰌽 "
+Mabox = "📦 "
+Macos = "󰀵 "
+Manjaro = " "
+Mariner = "🌊 "
+MidnightBSD = "🌘 "
+Mint = "󰣭 "
+NetBSD = "🚩 "
+NixOS = "❄️ "
+OpenBSD = " "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
+openSUSE = " "
+OracleLinux = "🦴 "
+Pop = " "
+Raspbian = " "
+Redhat = "󱄛 "
+RedHatEnterprise = "󱄛 "
+Redox = "🧪 "
+Solus = " "
+SUSE = " "
+Ubuntu = "󰕈 "
+Unknown = "❓ "
+Windows = "󰍲 "
+
+[username]
+show_always = true
+style_user = "bg:color_user_git fg:color_text"
+style_root = "bg:color_user_git fg:bold red"
+format = '[ $user ]($style)'
+disabled = false
+
+[localip]
+ssh_only = false
+style = "bg:color_ip fg:color_text"
+format = '[$localipv4]($style)'
+disabled = false
+
+[directory]
+style = "bg:color_dir fg:color_text"
+format = "[ $path ]($style)"
+truncation_length = 5
+truncation_symbol = "…/"
+disabled = false
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+# Other text substitions can be added here - order matters!
+
+
+# SECOND LINE ----------------------------
+[git_branch]
+symbol = " "
+style = "bg:color_user_git fg:color_text"
+format = '[$symbol $branch ]($style)'
+disabled = false
+
+[git_status]
+style = "bg:color_user_git fg:color_text"
+format = '[$all_status$ahead_behind ]($style)'
+disabled = false
+
+[python]
+symbol = " "
+style = "bg:color_virt_env fg:color_text"
+format = '[(\($virtualenv\) )]($style)'
+disabled = false
+
+[c]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[elixir]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[elm]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[golang]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[haskell]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[java]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[julia]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[nodejs]
+symbol = ""
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[nim]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[rust]
+symbol = ""
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[scala]
+symbol = " "
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[docker_context]
+symbol = "󰡨 "
+style = "bg:color_docker fg:color_text"
+format = '[ $symbol $context ]($style) $path'
+disabled = false
+
+
+# UNUSED ---------------------------------
+[time]
+time_format = "%R" # Hour:Minute Format
+style = "bg:color_dir fg:color_text"
+format = '[  $time ]($style)'
+disabled = true
+
+[character]
+success_symbol = '[ ➜](color_dir)'
+error_symbol = '[ ➜](bold red)'
+disabled = true
+
+[cmd_duration]
+min_time = 5000
+format = ' [$duration](color_dir)'
+disabled = true
