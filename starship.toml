@@ -10,7 +10,7 @@
 #                     https://www.nerdfonts.com/cheat-sheet
 
 # BORDER CUSTOMIZATION SYMBOLS
-#                  
+#                      
 #####################################################################
 
 
@@ -149,7 +149,7 @@ disabled = false
 
 # SECOND LINE ----------------------------
 [git_branch]
-symbol = " "
+symbol = " "
 style = "bg:color_user_git fg:color_text"
 format = '[$symbol $branch ]($style)'
 disabled = false
