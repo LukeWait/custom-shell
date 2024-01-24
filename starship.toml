@@ -160,49 +160,49 @@ format = '[ $all_status$ahead_behind ]($style)'
 disabled = false
 
 [python]
-symbol = " "
+symbol = ""
 style = "bg:color_virt_env fg:color_text"
-format = '[(\($virtualenv\) )]($style)'
+format = '[ $symbol (\($virtualenv\) )]($style)'
 disabled = false
 
 [c]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [elixir]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [elm]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [golang]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [haskell]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [java]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [julia]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
@@ -214,7 +214,7 @@ format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [nim]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
@@ -226,13 +226,13 @@ format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [scala]
-symbol = " "
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
 
 [docker_context]
-symbol = "󰡨 "
+symbol = "󰡨"
 style = "bg:color_docker fg:color_text"
 format = '[ $symbol $context ]($style) $path'
 disabled = false
