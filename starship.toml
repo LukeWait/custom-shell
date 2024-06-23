@@ -2,15 +2,15 @@
 # Author: ┬  ┬ ┬┬┌─┌─┐┬ ┬┌─┐╦╔╦╗
 #         │  │ │├┴┐├┤ │││├─┤║ ║
 #         ┴─┘└─┘┴ ┴└─┘└┴┘┴ ┴╩ ╩
-# Email: lukewait@outlook.com
-# Date: January 22, 2024
-# GitHub Repository: https://github.com/LukeWait/custom_starship.toml
-
+# Date: June 23, 2024
+# GitHub Repository: https://github.com/LukeWait/custom_shell
+#
 # Fonts: Nerd fonts - https://www.nerdfonts.com/
 #                     https://www.nerdfonts.com/cheat-sheet
-
+#
 # BORDER CUSTOMIZATION SYMBOLS
 #                      
+# ░ ▒ ▓ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟ ★ ☆ ❪ ❫ ❰ ❱ ❴ ❵ ➜
 #####################################################################
 
 
