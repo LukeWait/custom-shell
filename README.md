@@ -3,6 +3,7 @@
 Customized bash functionality and appearance.
 
 2 line format:
+
 username@host | ip | dir |
 
 git | py venv | languages | docker >
