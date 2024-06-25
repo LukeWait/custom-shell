@@ -1,0 +1,189 @@
+####################################################################
+# Author: ┬  ┬ ┬┬┌─┌─┐┬ ┬┌─┐╦╔╦╗
+#         │  │ │├┴┐├┤ │││├─┤║ ║
+#         ┴─┘└─┘┴ ┴└─┘└┴┘┴ ┴╩ ╩
+# Date: June 23, 2024
+# GitHub Repository: https://github.com/LukeWait/custom_shell
+#
+# BORDER CUSTOMIZATION SYMBOLS
+# ░ ▒ ▓ ─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼
+# 
+# BACKGROUND/TEXT COLOURS
+# - white, black, blue, cyan, green, purple, red, yellow
+# - NOTE: text can include 'bold' colours 
+#####################################################################
+
+# Prompt constructor
+format = """
+[░▒](fg:purple)\
+$os\
+$username\
+$hostname\
+[▒░](fg:purple)\
+$localip\
+[|](fg:white)\
+$directory\
+[|](fg:white)\
+
+$line_break\
+
+[ >](fg:white)\
+$git_branch\
+$git_status\
+[>](fg:white)\
+$python\
+[>](fg:white)\
+$c\
+$elixir\
+$elm\
+$golang\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$php\
+$rust\
+$scala\
+[>](fg:white)\
+$docker_context\
+[>](fg:white)\
+$character\
+"""
+
+# If a prompt takes longer than 5s to execute it will be terminated
+command_timeout = 5000
+
+# Provides a blank line at the start of the prompt
+add_newline = true
+
+# FIRST LINE -----------------------------
+[os]
+format = "[($name) ($version) ]($style)"
+style = "bg:purple fg:bold white"
+disabled = true
+
+[username]
+show_always = true
+style_user = "bg:purple fg:bold white"
+style_root = "bg:purple fg:bold red"
+format = '[ $user]($style)'
+disabled = false
+
+[hostname]
+ssh_only = false
+style = "bg:purple fg:bold white"
+format = '[@$hostname ]($style)'
+trim_at = ''
+disabled = false
+
+[localip]
+ssh_only = false
+style = "fg:bold black"
+format = '[ $localipv4 ]($style)'
+disabled = false
+
+[directory]
+style = "fg:green"
+format = "[ $path ]($style)"
+truncation_length = 5
+truncation_symbol = "…/"
+disabled = false
+
+# SECOND LINE ----------------------------
+[git_branch]
+style = "fg:purple"
+format = '[ git $branch ]($style)'
+disabled = false
+
+[git_status]
+style = "fg:bold black"
+format = '[$all_status$ahead_behind ]($style)'
+disabled = false
+
+[python]
+style = "fg:blue"
+format = '[ (\($virtualenv\) )]($style)'
+disabled = false
+
+[c]
+style = "fg:cyan"
+format = '[ c ($version) ]($style)'
+disabled = false
+
+[elixir]
+style = "fg:cyan"
+format = '[ elixir ($version) ]($style)'
+disabled = false
+
+[elm]
+style = "fg:cyan"
+format = '[ elm ($version) ]($style)'
+disabled = false
+
+[golang]
+style = "fg:cyan"
+format = '[ go ($version) ]($style)'
+disabled = false
+
+[haskell]
+style = "fg:cyan"
+format = '[ haskell ($version) ]($style)'
+disabled = false
+
+[java]
+style = "fg:cyan"
+format = '[ java ($version) ]($style)'
+disabled = false
+
+[julia]
+style = "fg:cyan"
+format = '[ julia ($version) ]($style)'
+disabled = false
+
+[nodejs]
+style = "fg:cyan"
+format = '[ node ($version) ]($style)'
+disabled = false
+
+[nim]
+style = "fg:cyan"
+format = '[ nim ($version) ]($style)'
+disabled = false
+
+[php]
+style = "fg:cyan"
+format = '[ php ($version) ]($style)'
+disabled = false
+
+[rust]
+style = "fg:cyan"
+format = '[ rust ($version) ]($style)'
+disabled = false
+
+[scala]
+style = "fg:cyan"
+format = '[ scala ($version) ]($style)'
+disabled = false
+
+[docker_context]
+style = "fg:yellow"
+format = '[ $context ]($style) $path'
+disabled = false
+
+[character]
+success_symbol = '[ >](bold green)'
+error_symbol = '[ >](bold red)'
+disabled = false
+
+# UNUSED ---------------------------------
+[time]
+time_format = "%R" # Hour:Minute Format
+style = "fg:white"
+format = '[ $time ]($style)'
+disabled = true
+
+[cmd_duration]
+min_time = 5000
+format = ' [$duration](white)'
+disabled = true
