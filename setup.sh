@@ -5,28 +5,6 @@ RED='\e[31m'
 YELLOW='\e[33m'
 GREEN='\e[32m'
 
-# Check if the home directory and linuxtoolbox folder exist, create them if they don't
-LINUXTOOLBOXDIR="$HOME/linuxtoolbox"
-
-if [[ ! -d "$LINUXTOOLBOXDIR" ]]; then
-    echo -e "${YELLOW}Creating linuxtoolbox directory: $LINUXTOOLBOXDIR${RC}"
-    mkdir -p "$LINUXTOOLBOXDIR"
-    echo -e "${GREEN}linuxtoolbox directory created: $LINUXTOOLBOXDIR${RC}"
-fi
-
-if [[ ! -d "$LINUXTOOLBOXDIR/mybash" ]]; then
-    echo -e "${YELLOW}Cloning mybash repository into: $LINUXTOOLBOXDIR/mybash${RC}"
-    git clone https://github.com/ChrisTitusTech/mybash "$LINUXTOOLBOXDIR/mybash"
-    if [[ $? -eq 0 ]]; then
-        echo -e "${GREEN}Successfully cloned mybash repository${RC}"
-    else
-        echo -e "${RED}Failed to clone mybash repository${RC}"
-        exit 1
-    fi
-fi
-
-cd "$LINUXTOOLBOXDIR/mybash"
-
 command_exists() {
     command -v $1 >/dev/null 2>&1
 }
@@ -39,7 +17,7 @@ checkEnv() {
         exit 1
     fi
 
-    ## Check Package Handeler
+    ## Check package handler.
     PACKAGEMANAGER='apt yum dnf pacman zypper'
     for pgm in ${PACKAGEMANAGER}; do
         if command_exists ${pgm}; then
@@ -60,7 +38,7 @@ checkEnv() {
         exit 1
     fi
 
-    ## Check SuperUser Group
+    ## Check superuser group
     SUPERUSERGROUP='wheel sudo root'
     for sug in ${SUPERUSERGROUP}; do
         if groups | grep ${sug}; then
@@ -74,34 +52,56 @@ checkEnv() {
         echo -e "${RED}You need to be a member of the sudo group to run me!"
         exit 1
     fi
-
 }
 
 installDepend() {
     ## Check for dependencies.
     DEPENDENCIES='bash bash-completion tar tree multitail fastfetch tldr trash-cli'
     echo -e "${YELLOW}Installing dependencies...${RC}"
-    if [[ $PACKAGER == "pacman" ]]; then
-        if ! command_exists yay && ! command_exists paru; then
-            echo "Installing yay as AUR helper..."
-            sudo ${PACKAGER} --noconfirm -S base-devel
-            cd /opt && sudo git clone https://aur.archlinux.org/yay-git.git && sudo chown -R ${USER}:${USER} ./yay-git
-            cd yay-git && makepkg --noconfirm -si
-        else
-            echo "Aur helper already installed"
-        fi
-        if command_exists yay; then
-            AUR_HELPER="yay"
-        elif command_exists paru; then
-            AUR_HELPER="paru"
-        else
-            echo "No AUR helper found. Please install yay or paru."
+
+    case $PACKAGER in
+        pacman)
+            if ! command_exists yay && ! command_exists paru; then
+                echo "Installing yay as AUR helper..."
+                sudo pacman --noconfirm -S base-devel
+                cd /opt && sudo git clone https://aur.archlinux.org/yay-git.git && sudo chown -R ${USER}:${USER} ./yay-git
+                cd yay-git && makepkg --noconfirm -si
+            else
+                echo "AUR helper already installed"
+            fi
+            if command_exists yay; then
+                AUR_HELPER="yay"
+            elif command_exists paru; then
+                AUR_HELPER="paru"
+            else
+                echo "No AUR helper found. Please install yay or paru."
+                exit 1
+            fi
+            ${AUR_HELPER} --noconfirm -S ${DEPENDENCIES}
+            sudo pacman -Syu
+            ;;
+        apt)
+            sudo apt install -yq ${DEPENDENCIES}
+            # Update tldr pages
+            echo -e "${YELLOW}Updating tldr pages...${RC}"
+            yes | tldr -u
+            ;;
+        zypper)
+            sudo zypper install -y ${DEPENDENCIES}
+            sudo zypper refresh
+            ;;
+        dnf)
+            sudo dnf install -y ${DEPENDENCIES}
+            sudo dnf check-update
+            ;;
+        yum)
+            sudo yum install -y ${DEPENDENCIES}
+            ;;
+        *)
+            echo "No supported package manager found. Please install packages manually."
             exit 1
-        fi
-        ${AUR_HELPER} --noconfirm -S ${DEPENDENCIES}
-    else
-        sudo ${PACKAGER} install -yq ${DEPENDENCIES}
-    fi
+            ;;
+    esac
 }
 
 installStarship() {
@@ -134,58 +134,54 @@ installZoxide() {
     fi
 }
 
-install_additional_dependencies() {
-    case $(command -v apt || command -v zypper || command -v dnf || command -v pacman) in
-        *apt)
-            curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-            chmod u+x nvim.appimage
-            ./nvim.appimage --appimage-extract
-            sudo mv squashfs-root /opt/neovim
-            sudo ln -s /opt/neovim/AppRun /usr/bin/nvim
+linkConfig() {
+    ## Get the correct user home directory.
+    USER_HOME=$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)
+
+    ## Determine which shell is in use
+    SHELL_TYPE=$(basename "$SHELL")
+
+    ## Check if a configuration file already exists for the current shell
+    case $SHELL_TYPE in
+        bash)
+            SHELL_CONFIG=".bashrc"
             ;;
-        *zypper)
-            sudo zypper refresh
-            sudo zypper install -y neovim 
-            ;;
-        *dnf)
-            sudo dnf check-update
-            sudo dnf install -y neovim 
-            ;;
-        *pacman)
-            sudo pacman -Syu
-            sudo pacman -S --noconfirm neovim 
+        zsh)
+            SHELL_CONFIG=".zshrc"
             ;;
         *)
-            echo "No supported package manager found. Please install neovim manually."
+            echo -e "${RED}Unsupported shell: $SHELL_TYPE${RC}"
             exit 1
             ;;
     esac
-}
 
-linkConfig() {
-    ## Get the correct user home directory.
-    USER_HOME=$(getent passwd ${SUDO_USER:-$USER} | cut -d: -f6)
-    ## Check if a bashrc file is already there.
-    OLD_BASHRC="${USER_HOME}/.bashrc"
-    if [[ -e ${OLD_BASHRC} ]]; then
-        echo -e "${YELLOW}Moving old bash config file to ${USER_HOME}/.bashrc.bak${RC}"
-        if ! mv ${OLD_BASHRC} ${USER_HOME}/.bashrc.bak; then
-            echo -e "${RED}Can't move the old bash config file!${RC}"
+    ## Determine the starship configuration file based on terminal type
+    if tty -s; then
+        STARSHIP_CONFIG="starship_tty.toml"
+    else
+        STARSHIP_CONFIG="starship.toml"
+    fi
+
+    ## Check if the old configuration file exists and move it if necessary
+    OLD_CONFIG="${USER_HOME}/${SHELL_CONFIG}"
+    if [[ -e "${OLD_CONFIG}" ]]; then
+        echo -e "${YELLOW}Moving old ${SHELL_CONFIG} to ${USER_HOME}/${SHELL_CONFIG}.bak${RC}"
+        if ! mv "${OLD_CONFIG}" "${USER_HOME}/${SHELL_CONFIG}.bak"; then
+            echo -e "${RED}Can't move the old ${SHELL_CONFIG}!${RC}"
             exit 1
         fi
     fi
 
-    echo -e "${YELLOW}Linking new bash config file...${RC}"
-    ## Make symbolic link.
-    ln -svf ${GITPATH}/.bashrc ${USER_HOME}/.bashrc
-    ln -svf ${GITPATH}/starship.toml ${USER_HOME}/.config/starship.toml
+    ## Link the new configuration files
+    echo -e "${YELLOW}Linking new configuration files...${RC}"
+    ln -svf "${GITPATH}/${SHELL_CONFIG}" "${USER_HOME}/${SHELL_CONFIG}"
+    ln -svf "${GITPATH}/${STARSHIP_CONFIG}" "${USER_HOME}/.config/starship.toml"
 }
 
 checkEnv
 installDepend
 installStarship
 installZoxide
-install_additional_dependencies
 
 if linkConfig; then
     echo -e "${GREEN}Done!\nrestart your shell to see the changes.${RC}"
