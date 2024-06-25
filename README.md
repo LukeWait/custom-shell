@@ -65,6 +65,9 @@ Work in progress. Things to do:
 - Ensure added packages are loaded as necessary
 - Include .zshrc file based on .bashrc
 
+### starship.toml
+- Add some additional palettes
+
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
