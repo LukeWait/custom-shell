@@ -1,6 +1,9 @@
 # Custom Shell for Linux
 ## Description
 Customized bash functionality and appearance.
+2 line format:
+username@host | ip | dir |
+git | py venv | languages | docker >
 
 ### Example Starship Prompt Appearance
 <p align="center">
