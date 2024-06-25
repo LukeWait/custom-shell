@@ -4,10 +4,13 @@ iatest=$(expr index "$-" i)
 #######################################################
 # SOURCED ALIAS'S AND SCRIPTS BY zachbrowne.me
 #######################################################
+if [ -f /usr/bin/fastfetch ]; then
+	fastfetch
+fi
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	 . /etc/bashrc
+	. /etc/bashrc
 fi
 
 # Enable bash programmable completion features in interactive shells
@@ -58,19 +61,20 @@ alias snano='sedit'
 alias vim='nvim'
 
 # Replace batcat with cat on Fedora as batcat is not available as a RPM in any form
-if command -v lsb_release > /dev/null; then
-    DISTRIBUTION=$(lsb_release -si)
+if command -v lsb_release >/dev/null; then
+	DISTRIBUTION=$(lsb_release -si)
 
-    if [ "$DISTRIBUTION" = "Fedora" ]; then
-        alias cat='bat'
-    else
-        alias cat='batcat'
-    fi
+	if [ "$DISTRIBUTION" = "Fedora" ] || [ "$DISTRIBUTION" = "Arch" ]; then
+		alias cat='bat'
+	else
+		alias cat='batcat'
+	fi
 fi
 
 # To have colors for ls and all grep commands such as grep, egrep and zgrep
 export CLICOLOR=1
 export LS_COLORS='no=00:fi=00:di=00;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:*.xml=00;31:'
+#export GREP_OPTIONS='--color=auto' #deprecated
 alias grep="/usr/bin/grep $GREP_OPTIONS"
 unset GREP_OPTIONS
 
@@ -148,20 +152,20 @@ alias bd='cd "$OLDPWD"'
 alias rmd='/bin/rm  --recursive --force --verbose '
 
 # Alias's for multiple directory listing commands
-alias la='ls -Alh' # show hidden files
+alias la='ls -Alh'                # show hidden files
 alias ls='ls -aFh --color=always' # add colors and file type extensions
-alias lx='ls -lXBh' # sort by extension
-alias lk='ls -lSrh' # sort by size
-alias lc='ls -lcrh' # sort by change time
-alias lu='ls -lurh' # sort by access time
-alias lr='ls -lRh' # recursive ls
-alias lt='ls -ltrh' # sort by date
-alias lm='ls -alh |more' # pipe through 'more'
-alias lw='ls -xAh' # wide listing format
-alias ll='ls -Fls' # long listing format
-alias labc='ls -lap' #alphabetical sort
-alias lf="ls -l | egrep -v '^d'" # files only
-alias ldir="ls -l | egrep '^d'" # directories only
+alias lx='ls -lXBh'               # sort by extension
+alias lk='ls -lSrh'               # sort by size
+alias lc='ls -lcrh'               # sort by change time
+alias lu='ls -lurh'               # sort by access time
+alias lr='ls -lRh'                # recursive ls
+alias lt='ls -ltrh'               # sort by date
+alias lm='ls -alh |more'          # pipe through 'more'
+alias lw='ls -xAh'                # wide listing format
+alias ll='ls -Fls'                # long listing format
+alias labc='ls -lap'              #alphabetical sort
+alias lf="ls -l | egrep -v '^d'"  # files only
+alias ldir="ls -l | egrep '^d'"   # directories only
 
 # alias chmod commands
 alias mx='chmod a+x'
@@ -225,51 +229,23 @@ alias kssh="kitty +kitten ssh"
 #######################################################
 # SPECIAL FUNCTIONS
 #######################################################
-
-# Use the best version of pico installed
-edit () {
-	if [ "$(type -t jpico)" = "file" ]; then
-		# Use JOE text editor http://joe-editor.sourceforge.net/
-		jpico -nonotice -linums -nobackups "$@"
-	elif [ "$(type -t nano)" = "file" ]; then
-		nano -c "$@"
-	elif [ "$(type -t pico)" = "file" ]; then
-		pico "$@"
-	else
-		nvim "$@"
-	fi
-}
-
-sedit () {
-	if [ "$(type -t jpico)" = "file" ]; then
-		# Use JOE text editor http://joe-editor.sourceforge.net/
-		sudo jpico -nonotice -linums -nobackups "$@"
-	elif [ "$(type -t nano)" = "file" ]; then
-		sudo nano -c "$@"
-	elif [ "$(type -t pico)" = "file" ]; then
-		sudo pico "$@"
-	else
-		sudo nvim "$@"
-	fi
-}
-
 # Extracts any archive(s) (if unp isn't installed)
-extract () {
+extract() {
 	for archive in "$@"; do
-		if [ -f "$archive" ] ; then
+		if [ -f "$archive" ]; then
 			case $archive in
-				*.tar.bz2)   tar xvjf $archive    ;;
-				*.tar.gz)    tar xvzf $archive    ;;
-				*.bz2)       bunzip2 $archive     ;;
-				*.rar)       rar x $archive       ;;
-				*.gz)        gunzip $archive      ;;
-				*.tar)       tar xvf $archive     ;;
-				*.tbz2)      tar xvjf $archive    ;;
-				*.tgz)       tar xvzf $archive    ;;
-				*.zip)       unzip $archive       ;;
-				*.Z)         uncompress $archive  ;;
-				*.7z)        7z x $archive        ;;
-				*)           echo "don't know how to extract '$archive'..." ;;
+			*.tar.bz2) tar xvjf $archive ;;
+			*.tar.gz) tar xvzf $archive ;;
+			*.bz2) bunzip2 $archive ;;
+			*.rar) rar x $archive ;;
+			*.gz) gunzip $archive ;;
+			*.tar) tar xvf $archive ;;
+			*.tbz2) tar xvjf $archive ;;
+			*.tgz) tar xvzf $archive ;;
+			*.zip) unzip $archive ;;
+			*.Z) uncompress $archive ;;
+			*.7z) 7z x $archive ;;
+			*) echo "don't know how to extract '$archive'..." ;;
 			esac
 		else
 			echo "'$archive' is not a valid file!"
@@ -278,7 +254,7 @@ extract () {
 }
 
 # Searches for text in all files in the current folder
-ftext () {
+ftext() {
 	# -i case-insensitive
 	# -I ignore binary files
 	# -H causes filename to be printed
@@ -290,10 +266,10 @@ ftext () {
 }
 
 # Copy file with a progress bar
-cpp () {
+cpp() {
 	set -e
-	strace -q -ewrite cp -- "${1}" "${2}" 2>&1 \
-	| awk '{
+	strace -q -ewrite cp -- "${1}" "${2}" 2>&1 |
+		awk '{
 	count += $NF
 	if (count % 10 == 0) {
 		percent = count / total_size * 100
@@ -310,8 +286,8 @@ cpp () {
 }
 
 # Copy and go to the directory
-cpg () {
-	if [ -d "$2" ];then
+cpg() {
+	if [ -d "$2" ]; then
 		cp "$1" "$2" && cd "$2"
 	else
 		cp "$1" "$2"
@@ -319,8 +295,8 @@ cpg () {
 }
 
 # Move and go to the directory
-mvg () {
-	if [ -d "$2" ];then
+mvg() {
+	if [ -d "$2" ]; then
 		mv "$1" "$2" && cd "$2"
 	else
 		mv "$1" "$2"
@@ -328,19 +304,18 @@ mvg () {
 }
 
 # Create and go to the directory
-mkdirg () {
+mkdirg() {
 	mkdir -p "$1"
 	cd "$1"
 }
 
 # Goes up a specified number of directories  (i.e. up 4)
-up () {
+up() {
 	local d=""
 	limit=$1
-	for ((i=1 ; i <= limit ; i++))
-		do
-			d=$d/..
-		done
+	for ((i = 1; i <= limit; i++)); do
+		d=$d/..
+	done
 	d=$(echo $d | sed 's/^\///')
 	if [ -z "$d" ]; then
 		d=..
@@ -348,150 +323,152 @@ up () {
 	cd $d
 }
 
-#Automatically do an ls after each cd
-# cd () {
-# 	if [ -n "$1" ]; then
-# 		builtin cd "$@" && ls
-# 	else
-# 		builtin cd ~ && ls
-# 	fi
-# }
+# Automatically do an ls after each cd, z, or zoxide
+cd ()
+{
+	if [ -n "$1" ]; then
+		builtin cd "$@" && ls
+	else
+		builtin cd ~ && ls
+	fi
+}
 
 # Returns the last 2 fields of the working directory
-pwdtail () {
-	pwd|awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
+pwdtail() {
+	pwd | awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
 }
 
 # Show the current distribution
-distribution () {
-	local dtype
-	# Assume unknown
-	dtype="unknown"
-	
-	# First test against Fedora / RHEL / CentOS / generic Redhat derivative
-	if [ -r /etc/rc.d/init.d/functions ]; then
-		source /etc/rc.d/init.d/functions
-		[ zz`type -t passed 2>/dev/null` == "zzfunction" ] && dtype="redhat"
-	
-	# Then test against SUSE (must be after Redhat,
-	# I've seen rc.status on Ubuntu I think? TODO: Recheck that)
-	elif [ -r /etc/rc.status ]; then
-		source /etc/rc.status
-		[ zz`type -t rc_reset 2>/dev/null` == "zzfunction" ] && dtype="suse"
-	
-	# Then test against Debian, Ubuntu and friends
-	elif [ -r /lib/lsb/init-functions ]; then
-		source /lib/lsb/init-functions
-		[ zz`type -t log_begin_msg 2>/dev/null` == "zzfunction" ] && dtype="debian"
-	
-	# Then test against Gentoo
-	elif [ -r /etc/init.d/functions.sh ]; then
-		source /etc/init.d/functions.sh
-		[ zz`type -t ebegin 2>/dev/null` == "zzfunction" ] && dtype="gentoo"
-	
-	# For Mandriva we currently just test if /etc/mandriva-release exists
-	# and isn't empty (TODO: Find a better way :)
-	elif [ -s /etc/mandriva-release ]; then
-		dtype="mandriva"
+distribution ()
+{
+	local dtype="unknown"  # Default to unknown
 
-	# For Slackware we currently just test if /etc/slackware-version exists
-	elif [ -s /etc/slackware-version ]; then
-		dtype="slackware"
-
+	# Use /etc/os-release for modern distro identification
+	if [ -r /etc/os-release ]; then
+		source /etc/os-release
+		case $ID in
+			fedora|rhel|centos)
+				dtype="redhat"
+				;;
+			sles|opensuse*)
+				dtype="suse"
+				;;
+			ubuntu|debian)
+				dtype="debian"
+				;;
+			gentoo)
+				dtype="gentoo"
+				;;
+			arch)
+				dtype="arch"
+				;;
+			slackware)
+				dtype="slackware"
+				;;
+			*)
+				# If ID is not recognized, keep dtype as unknown
+				;;
+		esac
 	fi
+
 	echo $dtype
 }
 
 # Show the current version of the operating system
-ver () {
+ver() {
 	local dtype
 	dtype=$(distribution)
 
-	if [ $dtype == "redhat" ]; then
-		if [ -s /etc/redhat-release ]; then
-			cat /etc/redhat-release && uname -a
-		else
-			cat /etc/issue && uname -a
-		fi
-	elif [ $dtype == "suse" ]; then
-		cat /etc/SuSE-release
-	elif [ $dtype == "debian" ]; then
-		lsb_release -a
-		# sudo cat /etc/issue && sudo cat /etc/issue.net && sudo cat /etc/lsb_release && sudo cat /etc/os-release # Linux Mint option 2
-	elif [ $dtype == "gentoo" ]; then
-		cat /etc/gentoo-release
-	elif [ $dtype == "mandriva" ]; then
-		cat /etc/mandriva-release
-	elif [ $dtype == "slackware" ]; then
-		cat /etc/slackware-version
-	else
-		if [ -s /etc/issue ]; then
-			cat /etc/issue
-		else
-			echo "Error: Unknown distribution"
-			exit 1
-		fi
-	fi
+	case $dtype in
+		"redhat")
+			if [ -s /etc/redhat-release ]; then
+				cat /etc/redhat-release
+			else
+				cat /etc/issue
+			fi
+			uname -a
+			;;
+		"suse")
+			cat /etc/SuSE-release
+			;;
+		"debian")
+			lsb_release -a
+			;;
+		"gentoo")
+			cat /etc/gentoo-release
+			;;
+		"arch")
+			cat /etc/os-release
+			;;
+		"slackware")
+			cat /etc/slackware-version
+			;;
+		*)
+			if [ -s /etc/issue ]; then
+				cat /etc/issue
+			else
+				echo "Error: Unknown distribution"
+				exit 1
+			fi
+			;;
+	esac
 }
 
 # Automatically install the needed support files for this .bashrc file
-install_bashrc_support () {
+install_bashrc_support() {
 	local dtype
 	dtype=$(distribution)
 
-	if [ $dtype == "redhat" ]; then
-		sudo yum install multitail tree joe
-	elif [ $dtype == "suse" ]; then
-		sudo zypper install multitail
-		sudo zypper install tree
-		sudo zypper install joe
-	elif [ $dtype == "debian" ]; then
-		sudo apt-get install multitail tree joe
-	elif [ $dtype == "gentoo" ]; then
-		sudo emerge multitail
-		sudo emerge tree
-		sudo emerge joe
-	elif [ $dtype == "mandriva" ]; then
-		sudo urpmi multitail
-		sudo urpmi tree
-		sudo urpmi joe
-	elif [ $dtype == "slackware" ]; then
-		echo "No install support for Slackware"
-	else
-		echo "Unknown distribution"
-	fi
-}
-
-# Show current network information
-netinfo () {
-	echo "--------------- Network Information ---------------"
-	/sbin/ifconfig | awk /'inet addr/ {print $2}'
-	echo ""
-	/sbin/ifconfig | awk /'Bcast/ {print $3}'
-	echo ""
-	/sbin/ifconfig | awk /'inet addr/ {print $4}'
-
-	/sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
-	echo "---------------------------------------------------"
+	case $dtype in
+		"redhat")
+			sudo yum install multitail tree zoxide trash-cli fzf bash-completion fastfetch
+			;;
+		"suse")
+			sudo zypper install multitail tree zoxide trash-cli fzf bash-completion fastfetch
+			;;
+		"debian")
+			sudo apt-get install multitail tree zoxide trash-cli fzf bash-completion
+			# Fetch the latest fastfetch release URL for linux-amd64 deb file
+			FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
+			
+			# Download the latest fastfetch deb file
+			curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
+			
+			# Install the downloaded deb file using apt-get
+			sudo apt-get install /tmp/fastfetch_latest_amd64.deb
+			;;
+		"arch")
+			sudo paru multitail tree zoxide trash-cli fzf bash-completion fastfetch
+			;;
+		"slackware")
+			echo "No install support for Slackware"
+			;;
+		*)
+			echo "Unknown distribution"
+			;;
+	esac
 }
 
 # IP address lookup
 alias whatismyip="whatsmyip"
-function whatsmyip () {
+function whatsmyip ()
+{
 	# Internal IP Lookup.
-	if [ -e /sbin/ip ];
-	then
-		echo -n "Internal IP: " ; /sbin/ip addr show wlan0 | grep "inet " | awk -F: '{print $1}' | awk '{print $2}'
+	if [ -e /sbin/ip ]; then
+		echo -n "Internal IP: "
+		/sbin/ip addr show wlan0 | grep "inet " | awk -F: '{print $1}' | awk '{print $2}'
 	else
-		echo -n "Internal IP: " ; /sbin/ifconfig wlan0 | grep "inet " | awk -F: '{print $1} |' | awk '{print $2}'
+		echo -n "Internal IP: "
+		/sbin/ifconfig wlan0 | grep "inet " | awk -F: '{print $1} |' | awk '{print $2}'
 	fi
 
-	# External IP Lookup 
-	echo -n "External IP: " ; curl -s ifconfig.me
+	# External IP Lookup
+	echo -n "External IP: "
+	curl -s ifconfig.me
 }
 
 # View Apache logs
-apachelog () {
+apachelog() {
 	if [ -f /etc/httpd/conf/httpd.conf ]; then
 		cd /var/log/httpd && ls -xAh && multitail --no-repeat -c -s 2 /var/log/httpd/*_log
 	else
@@ -500,7 +477,7 @@ apachelog () {
 }
 
 # Edit the Apache configuration
-apacheconfig () {
+apacheconfig() {
 	if [ -f /etc/httpd/conf/httpd.conf ]; then
 		sedit /etc/httpd/conf/httpd.conf
 	elif [ -f /etc/apache2/apache2.conf ]; then
@@ -513,7 +490,7 @@ apacheconfig () {
 }
 
 # Edit the PHP configuration file
-phpconfig () {
+phpconfig() {
 	if [ -f /etc/php.ini ]; then
 		sedit /etc/php.ini
 	elif [ -f /etc/php/php.ini ]; then
@@ -532,7 +509,7 @@ phpconfig () {
 }
 
 # Edit the MySQL configuration file
-mysqlconfig () {
+mysqlconfig() {
 	if [ -f /etc/my.cnf ]; then
 		sedit /etc/my.cnf
 	elif [ -f /etc/mysql/my.cnf ]; then
@@ -552,106 +529,59 @@ mysqlconfig () {
 	fi
 }
 
-# For some reason, rot13 pops up everywhere
-rot13 () {
-	if [ $# -eq 0 ]; then
-		tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
-	else
-		echo $* | tr '[a-m][n-z][A-M][N-Z]' '[n-z][a-m][N-Z][A-M]'
-	fi
-}
 
 # Trim leading and trailing spaces (for scripts)
-trim () {
+trim() {
 	local var=$*
-	var="${var#"${var%%[![:space:]]*}"}"  # remove leading whitespace characters
-	var="${var%"${var##*[![:space:]]}"}"  # remove trailing whitespace characters
+	var="${var#"${var%%[![:space:]]*}"}" # remove leading whitespace characters
+	var="${var%"${var##*[![:space:]]}"}" # remove trailing whitespace characters
 	echo -n "$var"
 }
-
 # GitHub Titus Additions
+
 gcom() {
 	git add .
 	git commit -m "$1"
 }
-
 lazyg() {
 	git add .
 	git commit -m "$1"
 	git push
 }
 
-# zoxide stuff
-_z_cd() {
-    cd "$@" || return "$?"
-
-    if [ "$_ZO_ECHO" = "1" ]; then
-        echo "$PWD"
+function hb {
+    if [ $# -eq 0 ]; then
+        echo "No file path specified."
+        return
+    elif [ ! -f "$1" ]; then
+        echo "File path does not exist."
+        return
     fi
-}
 
-z() {
-    if [ "$#" -eq 0 ]; then
-        _z_cd ~
-    elif [ "$#" -eq 1 ] && [ "$1" = '-' ]; then
-        if [ -n "$OLDPWD" ]; then
-            _z_cd "$OLDPWD"
-        else
-            echo 'zoxide: $OLDPWD is not set'
-            return 1
-        fi
+    uri="http://bin.christitus.com/documents"
+    response=$(curl -s -X POST -d "$(cat "$1")" "$uri")
+    if [ $? -eq 0 ]; then
+        hasteKey=$(echo $response | jq -r '.key')
+        echo "http://bin.christitus.com/$hasteKey"
     else
-        _zoxide_result="$(zoxide query -- "$@")" && _z_cd "$_zoxide_result"
+        echo "Failed to upload the document."
     fi
 }
-
-zi() {
-    _zoxide_result="$(zoxide query -i -- "$@")" && _z_cd "$_zoxide_result"
-}
-
-alias za='zoxide add'
-alias zq='zoxide query'
-alias zqi='zoxide query -i'
-alias zr='zoxide remove'
-
-zri() {
-    _zoxide_result="$(zoxide query -i -- "$@")" && zoxide remove "$_zoxide_result"
-}
-
-_zoxide_hook() {
-    if [ -z "${_ZO_PWD}" ]; then
-        _ZO_PWD="${PWD}"
-    elif [ "${_ZO_PWD}" != "${PWD}" ]; then
-        _ZO_PWD="${PWD}"
-        zoxide add "$(pwd -L)"
-    fi
-}
-
-case "$PROMPT_COMMAND" in
-    *_zoxide_hook*) ;;
-    *) PROMPT_COMMAND="_zoxide_hook${PROMPT_COMMAND:+;${PROMPT_COMMAND}}" ;;
-esac
-
-alias lookingglass="~/looking-glass-B5.0.1/client/build/looking-glass-client -F"
 
 #######################################################
 # Set the ultimate amazing command prompt
 #######################################################
 
-alias hug="hugo server -F --bind=10.0.0.210 --baseURL=http://10.0.0.210"
+alias hug="hugo server -F --bind=10.0.0.97 --baseURL=http://10.0.0.97"
+bind '"\C-f":"zi\n"'
 
 export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin"
 
-eval "$(starship init bash)"
+# Install Starship - curl -sS https://starship.rs/install.sh | sh
 
-eval "$(thefuck --alias)"
-
-#Autojump
-if [ -f "/usr/share/autojump/autojump.sh" ]; then
-	. /usr/share/autojump/autojump.sh
-elif [ -f "/usr/share/autojump/autojump.bash" ]; then
-	. /usr/share/autojump/autojump.bash
-else
-	echo "can't found the autojump script"
+# Don't use starship if the session is a remote connection (avoids tty connections looking scuffed)
+if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" && -z "$SERIAL_CONSOLE_CONNECTION" && -z "$CONTAINER_SHELL_CONNECTION" ]]; then
+    eval "$(starship init zsh)"
 fi
-
+eval "$(thefuck --alias)"
+eval "$(zoxide init bash)"
