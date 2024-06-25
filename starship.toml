@@ -20,6 +20,7 @@ format = """
 [ ](bg:color_user_git)\
 $os\
 $username\
+$hostname\
 [ ](bg:color_ip fg:color_user_git)\
 $localip\
 [ ](fg:color_dir bg:color_ip)\
@@ -69,6 +70,15 @@ color_virt_env  = '#434c5e'
 color_lang      = '#4c566a'
 color_docker    = '#5e81ac'
 color_dir       = '#6272a4'
+
+[palettes.dusk]
+color_text      = '#f8f8ff'
+color_ip        = '#2e3440'
+color_user_git  = '#403f85'
+color_virt_env  = '#98498e'
+color_lang      = '#da5c82'
+color_docker    = '#ff856c'
+color_dir       = '#010318'
 
 
 # FIRST LINE -----------------------------
@@ -123,7 +133,14 @@ Windows = "󰍲 "
 show_always = true
 style_user = "bg:color_user_git fg:color_text"
 style_root = "bg:color_user_git fg:bold red"
-format = '[ $user ]($style)'
+format = '[ $user]($style)'
+disabled = false
+
+[hostname]
+ssh_only = false
+style = "bg:color_user_git fg:color_text"
+format = '[@$hostname ]($style)'
+trim_at = ''
 disabled = false
 
 [localip]
@@ -151,12 +168,12 @@ disabled = false
 [git_branch]
 symbol = " "
 style = "bg:color_user_git fg:color_text"
-format = '[$symbol $branch]($style)'
+format = '[$symbol $branch ]($style)'
 disabled = false
 
 [git_status]
 style = "bg:color_user_git fg:color_text"
-format = '[ $all_status$ahead_behind ]($style)'
+format = '[$all_status$ahead_behind ]($style)'
 disabled = false
 
 [python]
@@ -215,6 +232,12 @@ disabled = false
 
 [nim]
 symbol = ""
+style = "bg:color_lang fg:color_text"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[php]
+symbol = ""
 style = "bg:color_lang fg:color_text"
 format = '[ $symbol ($version) ]($style)'
 disabled = false
