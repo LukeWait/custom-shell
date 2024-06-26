@@ -79,12 +79,16 @@ installDepend() {
             fi
             ${AUR_HELPER} --noconfirm -S ${DEPENDENCIES}
             sudo pacman -Syu
+            sudo pacman -S thefuck
             ;;
         apt)
             sudo apt install -yq ${DEPENDENCIES}
+            sudo apt update
             # Update tldr pages
             echo -e "${YELLOW}Updating tldr pages...${RC}"
             yes | tldr -u
+            sudo apt install python3-dev python3-pip python3-setuptools
+            pip install thefuck
             ;;
         zypper)
             sudo zypper install -y ${DEPENDENCIES}
