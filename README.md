@@ -58,6 +58,7 @@ Not currently supported - maybe in the future.
 Work in progress. Things to do:
 ### setup.sh
 - Add worthwhile packages
+- Add nerd font dl/install (firacode for default)
 
 ### .bashrc
 - Review aliases and adjust
