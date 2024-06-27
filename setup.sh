@@ -129,7 +129,7 @@ installStarship() {
         return
     fi
 
-    if ! y | curl -sS https://starship.rs/install.sh | sh; then
+    if ! curl -sS https://starship.rs/install.sh | sh; then
         echo -e "${RED}Something went wrong during starship install!${RC}"
         exit 1
     fi
@@ -201,8 +201,7 @@ linkConfig() {
     echo -e "${YELLOW}Linking new configuration files...${RC}"
     ln -svf "${GITPATH}/${SHELL_CONFIG}" "${USER_HOME}/${SHELL_CONFIG}"
     ln -svf "${GITPATH}/${STARSHIP_CONFIG}" "${USER_HOME}/.config/starship.toml"
-    echo -e "${GREEN}Done!\nRestarting your shell to see the changes...${RC}"
-    source "${USER_HOME}/${SHELL_CONFIG}"
+    echo -e "${GREEN}Done! Please restart your terminal or run 'source ~/${SHELL_CONFIG}' to apply the changes.${RC}"
 }
 
 checkEnv
