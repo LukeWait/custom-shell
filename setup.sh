@@ -5,10 +5,12 @@ RED='\e[31m'
 YELLOW='\e[33m'
 GREEN='\e[32m'
 
+# Checks if a command exists in the system.
 command_exists() {
     command -v $1 >/dev/null 2>&1
 }
 
+# Checks the environment for required tools and permissions.
 checkEnv() {
     ## Check for requirements.
     REQUIREMENTS='curl groups sudo'
@@ -54,9 +56,10 @@ checkEnv() {
     fi
 }
 
+# Installs required dependencies based on the detected package manager.
 installDepend() {
     ## Check for dependencies.
-    DEPENDENCIES='bash bash-completion tar tree multitail fastfetch tldr trash-cli'
+    DEPENDENCIES='bash bash-completion tar tree multitail tldr trash-cli fzf btop bat'
     echo -e "${YELLOW}Installing dependencies...${RC}"
 
     case $PACKAGER in
@@ -82,13 +85,23 @@ installDepend() {
             sudo pacman -S thefuck
             ;;
         apt)
-            sudo apt install -yq ${DEPENDENCIES}
-            sudo apt update
+            sudo apt install -yq nala
+            sudo nala install -yq ${DEPENDENCIES}
+            sudo nala update
+
+            # Install python/pip
+            sudo nala install python3-dev python3-pip python3-setuptools
+
             # Update tldr pages
-            echo -e "${YELLOW}Updating tldr pages...${RC}"
+            mkdir -p ~/.local/share
             yes | tldr -u
-            sudo apt install python3-dev python3-pip python3-setuptools
-            pip install thefuck
+
+            # Fetch the latest fastfetch release URL for linux-amd64 deb file
+			FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
+			# Download the latest fastfetch deb file
+			curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
+			# Install the downloaded deb file using nala
+			sudo nala install /tmp/fastfetch_latest_amd64.deb
             ;;
         zypper)
             sudo zypper install -y ${DEPENDENCIES}
@@ -108,6 +121,7 @@ installDepend() {
     esac
 }
 
+# Installs Starship prompt if not already installed.
 installStarship() {
     if command_exists starship; then
         echo "Starship already installed"
@@ -118,14 +132,21 @@ installStarship() {
         echo -e "${RED}Something went wrong during starship install!${RC}"
         exit 1
     fi
-    if command_exists fzf; then
-        echo "Fzf already installed"
-    else
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-        ~/.fzf/install
+
+    ## Add nerd fonts for compatability with Starship icons only if supported.
+    if ! tty -s; then
+        mkdir -p ~/.local/share/fonts
+
+        # Add the FiraCode Nerd Font to the fonts directory.
+        wget -O ~/.local/share/fonts/FiraCode.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+        unzip ~/.local/share/fonts/FiraCode.zip -d ~/.local/share/fonts
+        rm ~/.local/share/fonts/FiraCode.zip
+
+        fc-cache -fv
     fi
 }
 
+# Installs Zoxide if not already installed.
 installZoxide() {
     if command_exists zoxide; then
         echo "Zoxide already installed"
@@ -138,14 +159,13 @@ installZoxide() {
     fi
 }
 
+# Links the config files to the user's home directory based on detected shell.
 linkConfig() {
     ## Get the correct user home directory.
     USER_HOME=$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)
 
-    ## Determine which shell is in use
+    ## Determine which shell is in use and check if a configuration file already exists
     SHELL_TYPE=$(basename "$SHELL")
-
-    ## Check if a configuration file already exists for the current shell
     case $SHELL_TYPE in
         bash)
             SHELL_CONFIG=".bashrc"
@@ -180,15 +200,11 @@ linkConfig() {
     echo -e "${YELLOW}Linking new configuration files...${RC}"
     ln -svf "${GITPATH}/${SHELL_CONFIG}" "${USER_HOME}/${SHELL_CONFIG}"
     ln -svf "${GITPATH}/${STARSHIP_CONFIG}" "${USER_HOME}/.config/starship.toml"
+    echo -e "${GREEN}Done!\nrestart your shell to see the changes.${RC}"                 
 }
 
 checkEnv
 installDepend
 installStarship
 installZoxide
-
-if linkConfig; then
-    echo -e "${GREEN}Done!\nrestart your shell to see the changes.${RC}"
-else
-    echo -e "${RED}Something went wrong!${RC}"
-fi
+linkConfig
