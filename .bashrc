@@ -291,12 +291,12 @@ mkdirg () {
 	cd "$1"
 }
 
-# Automatically do an ls after each cd, z, or zoxide
+# Alias cd to z and automatically do ls
 cd () {
 	if [ -n "$1" ]; then
-		builtin cd "$@" && ls
+		z "$@" && ls
 	else
-		builtin cd ~ && ls
+		z ~ && ls
 	fi
 }
 
@@ -388,23 +388,24 @@ install_bashrc_support() {
 			sudo zypper install multitail tree zoxide trash-cli fzf bash-completion fastfetch
 			;;
 		"debian")
-			sudo apt install -yq nala
-            sudo nala install -yq ${DEPENDENCIES}
-            sudo nala update
+			# Just incase they aren't there (tty)
+            mkdir -p ~/.local/share
+            mkdir -p ~/.config
+            
+            sudo apt install -yq ${DEPENDENCIES}
+            sudo apt update -yq
 
             # Install python/pip
-            sudo nala install python3-dev python3-pip python3-setuptools
+            sudo apt install -yq python3-dev python3-pip python3-setuptools
 
             # Update tldr pages
-            mkdir -p ~/.local/share
-            yes | tldr -u
+            y | tldr -u
 
             # Fetch the latest fastfetch release URL for linux-amd64 deb file
-			FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
-			# Download the latest fastfetch deb file
-			curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
-			# Install the downloaded deb file using apt-get
-			sudo apt-get install /tmp/fastfetch_latest_amd64.deb
+            FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
+            # Download the latest fastfetch deb file and install
+            curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
+            sudo apt-get install -yq /tmp/fastfetch_latest_amd64.deb
 			;;
 		"arch")
 			sudo paru multitail tree zoxide trash-cli fzf bash-completion fastfetch
@@ -520,7 +521,7 @@ lazyg() {
 #######################################################
 # INITIALIZATION
 #######################################################
-# Start fzf with 'Ctrl + f'
+# Start zoxide interactive search (fzf) with 'Ctrl + f'
 bind '"\C-f":"zi\n"'
 
 # Modifies the PATH environment variable to include additional directories where executable binaries are located
@@ -531,4 +532,4 @@ if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" &&
     eval "$(starship init bash)"
 fi
 eval "$(thefuck --alias)"
-eval "$(zoxide init --cmd cd bash)"
+eval "$(zoxide init bash)"
