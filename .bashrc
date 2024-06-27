@@ -118,8 +118,8 @@ alias ping='ping -c 10'
 alias less='less -R'
 alias multitail='multitail --no-repeat -c'
 alias freshclam='sudo freshclam'
-alias apt='nala'
-alias apt-get='nala'
+alias apt='sudo apt'
+alias apt-get='sudo apt-get'
 
 # Change directory aliases
 alias home='cd ~'
@@ -531,4 +531,4 @@ if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" &&
     eval "$(starship init bash)"
 fi
 eval "$(thefuck --alias)"
-eval "$(zoxide init bash)"
+eval "$(zoxide init --cmd cd bash)"
