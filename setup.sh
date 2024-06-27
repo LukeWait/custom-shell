@@ -96,13 +96,12 @@ installDepend() {
             sudo apt install -yq python3-dev python3-pip python3-setuptools
 
             # Update tldr pages
-            yes | tldr -u
+            y | tldr -u
 
             # Fetch the latest fastfetch release URL for linux-amd64 deb file
             FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
-            # Download the latest fastfetch deb file
+            # Download the latest fastfetch deb file and install
             curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
-            # Install the downloaded deb file using nala
             sudo apt-get install -yq /tmp/fastfetch_latest_amd64.deb
             ;;
         zypper)
@@ -130,7 +129,7 @@ installStarship() {
         return
     fi
 
-    if ! curl -sS https://starship.rs/install.sh | sh; then
+    if ! y | curl -sS https://starship.rs/install.sh | sh; then
         echo -e "${RED}Something went wrong during starship install!${RC}"
         exit 1
     fi
@@ -202,7 +201,8 @@ linkConfig() {
     echo -e "${YELLOW}Linking new configuration files...${RC}"
     ln -svf "${GITPATH}/${SHELL_CONFIG}" "${USER_HOME}/${SHELL_CONFIG}"
     ln -svf "${GITPATH}/${STARSHIP_CONFIG}" "${USER_HOME}/.config/starship.toml"
-    echo -e "${GREEN}Done!\nrestart your shell to see the changes.${RC}"                 
+    echo -e "${GREEN}Done!\nRestarting your shell to see the changes...${RC}"
+    source "${USER_HOME}/${SHELL_CONFIG}"
 }
 
 checkEnv
