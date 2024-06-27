@@ -10,7 +10,7 @@ fi
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+	 . /etc/bashrc
 fi
 
 # Enable bash programmable completion features in interactive shells
@@ -23,7 +23,6 @@ fi
 #######################################################
 # EXPORTS
 #######################################################
-
 # Disable the bell
 if [[ $iatest -gt 0 ]]; then bind "set bell-style visible"; fi
 
@@ -52,13 +51,8 @@ if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
 if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
 
 # Set the default editor
-export EDITOR=nvim
-export VISUAL=nvim
-alias pico='edit'
-alias spico='sedit'
-alias nano='edit'
-alias snano='sedit'
-alias vim='nvim'
+export EDITOR=nano
+export VISUAL=nano
 
 # Replace batcat with cat on Fedora as batcat is not available as a RPM in any form
 if command -v lsb_release >/dev/null; then
@@ -94,9 +88,6 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # Alias's for SSH
 # alias SERVERNAME='ssh YOURWEBSITE.com -l USERNAME -p PORTNUMBERHERE'
 
-# Alias's to change the directory
-alias web='cd /var/www/html'
-
 # Alias's to mount ISO files
 # mount -o loop /home/NAMEOFISO.iso /home/ISOMOUNTDIR/
 # umount /home/NAMEOFISO.iso
@@ -105,8 +96,7 @@ alias web='cd /var/www/html'
 #######################################################
 # GENERAL ALIAS'S
 #######################################################
-# To temporarily bypass an alias, we precede the command with a \
-# EG: the ls command is aliased, but to use the normal ls command you would type \ls
+# To temporarily bypass an alias, precede the command with a '\'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -114,9 +104,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 # Edit this .bashrc file
 alias ebrc='edit ~/.bashrc'
-
-# Show help for this .bashrc file
-alias hlp='less ~/.bashrc_help'
 
 # alias to show the date
 alias da='date "+%Y-%m-%d %A %T %Z"'
@@ -129,13 +116,10 @@ alias mkdir='mkdir -p'
 alias ps='ps auxf'
 alias ping='ping -c 10'
 alias less='less -R'
-alias cls='clear'
-alias apt-get='sudo apt-get'
 alias multitail='multitail --no-repeat -c'
 alias freshclam='sudo freshclam'
-alias vi='nvim'
-alias svi='sudo vi'
-alias vis='nvim "+set si"'
+alias apt='nala'
+alias apt-get='nala'
 
 # Change directory aliases
 alias home='cd ~'
@@ -144,28 +128,29 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
-
-# cd into the old directory
 alias bd='cd "$OLDPWD"'
+
+# Alias's to change the directory
+alias web='cd /var/www/html'
 
 # Remove a directory and all files
 alias rmd='/bin/rm  --recursive --force --verbose '
 
 # Alias's for multiple directory listing commands
-alias la='ls -Alh'                # show hidden files
+alias la='ls -Alh' # show hidden files
 alias ls='ls -aFh --color=always' # add colors and file type extensions
-alias lx='ls -lXBh'               # sort by extension
-alias lk='ls -lSrh'               # sort by size
-alias lc='ls -lcrh'               # sort by change time
-alias lu='ls -lurh'               # sort by access time
-alias lr='ls -lRh'                # recursive ls
-alias lt='ls -ltrh'               # sort by date
-alias lm='ls -alh |more'          # pipe through 'more'
-alias lw='ls -xAh'                # wide listing format
-alias ll='ls -Fls'                # long listing format
-alias labc='ls -lap'              #alphabetical sort
-alias lf="ls -l | egrep -v '^d'"  # files only
-alias ldir="ls -l | egrep '^d'"   # directories only
+alias lx='ls -lXBh' # sort by extension
+alias lk='ls -lSrh' # sort by size
+alias lc='ls -lcrh' # sort by change time
+alias lu='ls -lurh' # sort by access time
+alias lr='ls -lRh' # recursive ls
+alias lt='ls -ltrh' # sort by date
+alias lm='ls -alh |more' # pipe through 'more'
+alias lw='ls -xAh' # wide listing format
+alias ll='ls -Fls' # long listing format
+alias labc='ls -lap' #alphabetical sort
+alias lf="ls -l | egrep -v '^d'" # files only
+alias ldir="ls -l | egrep '^d'" # directories only
 
 # alias chmod commands
 alias mx='chmod a+x'
@@ -187,9 +172,6 @@ alias f="find . | grep "
 
 # Count all files (recursively) in the current folder
 alias countfiles="for t in files links directories; do echo \`find . -type \${t:0:1} | wc -l\` \$t; done 2> /dev/null"
-
-# To see if a command is aliased, a file, or a built-in command
-alias checkcommand="type -t"
 
 # Show open ports
 alias openports='netstat -nape --inet'
@@ -220,10 +202,10 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 # SHA1
 alias sha1='openssl sha1'
 
+# When you want to paste clipboard content into an application that doesn't support the standard paste command
 alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 
 # KITTY - alias to be able to use kitty features when connecting to remote servers(e.g use tmux on remote server)
-
 alias kssh="kitty +kitten ssh"
 
 #######################################################
@@ -254,7 +236,7 @@ extract() {
 }
 
 # Searches for text in all files in the current folder
-ftext() {
+ftext () {
 	# -i case-insensitive
 	# -I ignore binary files
 	# -H causes filename to be printed
@@ -266,10 +248,10 @@ ftext() {
 }
 
 # Copy file with a progress bar
-cpp() {
+cpp () {
 	set -e
-	strace -q -ewrite cp -- "${1}" "${2}" 2>&1 |
-		awk '{
+	strace -q -ewrite cp -- "${1}" "${2}" 2>&1 \
+	| awk '{
 	count += $NF
 	if (count % 10 == 0) {
 		percent = count / total_size * 100
@@ -286,8 +268,8 @@ cpp() {
 }
 
 # Copy and go to the directory
-cpg() {
-	if [ -d "$2" ]; then
+cpg () {
+	if [ -d "$2" ];then
 		cp "$1" "$2" && cd "$2"
 	else
 		cp "$1" "$2"
@@ -295,8 +277,8 @@ cpg() {
 }
 
 # Move and go to the directory
-mvg() {
-	if [ -d "$2" ]; then
+mvg () {
+	if [ -d "$2" ];then
 		mv "$1" "$2" && cd "$2"
 	else
 		mv "$1" "$2"
@@ -304,28 +286,13 @@ mvg() {
 }
 
 # Create and go to the directory
-mkdirg() {
+mkdirg () {
 	mkdir -p "$1"
 	cd "$1"
 }
 
-# Goes up a specified number of directories  (i.e. up 4)
-up() {
-	local d=""
-	limit=$1
-	for ((i = 1; i <= limit; i++)); do
-		d=$d/..
-	done
-	d=$(echo $d | sed 's/^\///')
-	if [ -z "$d" ]; then
-		d=..
-	fi
-	cd $d
-}
-
 # Automatically do an ls after each cd, z, or zoxide
-cd ()
-{
+cd () {
 	if [ -n "$1" ]; then
 		builtin cd "$@" && ls
 	else
@@ -334,8 +301,8 @@ cd ()
 }
 
 # Returns the last 2 fields of the working directory
-pwdtail() {
-	pwd | awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
+pwdtail () {
+	pwd|awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
 }
 
 # Show the current distribution
@@ -427,13 +394,21 @@ install_bashrc_support() {
 			sudo zypper install multitail tree zoxide trash-cli fzf bash-completion fastfetch
 			;;
 		"debian")
-			sudo apt-get install multitail tree zoxide trash-cli fzf bash-completion
-			# Fetch the latest fastfetch release URL for linux-amd64 deb file
+			sudo apt install -yq nala
+            sudo nala install -yq ${DEPENDENCIES}
+            sudo nala update
+
+            # Install python/pip
+            sudo nala install python3-dev python3-pip python3-setuptools
+
+            # Update tldr pages
+            mkdir -p ~/.local/share
+            yes | tldr -u
+
+            # Fetch the latest fastfetch release URL for linux-amd64 deb file
 			FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
-			
 			# Download the latest fastfetch deb file
 			curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
-			
 			# Install the downloaded deb file using apt-get
 			sudo apt-get install /tmp/fastfetch_latest_amd64.deb
 			;;
@@ -479,9 +454,9 @@ apachelog() {
 # Edit the Apache configuration
 apacheconfig() {
 	if [ -f /etc/httpd/conf/httpd.conf ]; then
-		sedit /etc/httpd/conf/httpd.conf
+		sudo nano /etc/httpd/conf/httpd.conf
 	elif [ -f /etc/apache2/apache2.conf ]; then
-		sedit /etc/apache2/apache2.conf
+		sudo nano /etc/apache2/apache2.conf
 	else
 		echo "Error: Apache config file could not be found."
 		echo "Searching for possible locations:"
@@ -492,15 +467,15 @@ apacheconfig() {
 # Edit the PHP configuration file
 phpconfig() {
 	if [ -f /etc/php.ini ]; then
-		sedit /etc/php.ini
+		sudo nano /etc/php.ini
 	elif [ -f /etc/php/php.ini ]; then
-		sedit /etc/php/php.ini
+		sudo nano /etc/php/php.ini
 	elif [ -f /etc/php5/php.ini ]; then
-		sedit /etc/php5/php.ini
+		sudo nano /etc/php5/php.ini
 	elif [ -f /usr/bin/php5/bin/php.ini ]; then
-		sedit /usr/bin/php5/bin/php.ini
+		sudo nano /usr/bin/php5/bin/php.ini
 	elif [ -f /etc/php5/apache2/php.ini ]; then
-		sedit /etc/php5/apache2/php.ini
+		sudo nano /etc/php5/apache2/php.ini
 	else
 		echo "Error: php.ini file could not be found."
 		echo "Searching for possible locations:"
@@ -511,17 +486,17 @@ phpconfig() {
 # Edit the MySQL configuration file
 mysqlconfig() {
 	if [ -f /etc/my.cnf ]; then
-		sedit /etc/my.cnf
+		sudo nano /etc/my.cnf
 	elif [ -f /etc/mysql/my.cnf ]; then
-		sedit /etc/mysql/my.cnf
+		sudo nano /etc/mysql/my.cnf
 	elif [ -f /usr/local/etc/my.cnf ]; then
-		sedit /usr/local/etc/my.cnf
+		sudo nano /usr/local/etc/my.cnf
 	elif [ -f /usr/bin/mysql/my.cnf ]; then
-		sedit /usr/bin/mysql/my.cnf
+		sudo nano /usr/bin/mysql/my.cnf
 	elif [ -f ~/my.cnf ]; then
-		sedit ~/my.cnf
+		sudo nano ~/my.cnf
 	elif [ -f ~/.my.cnf ]; then
-		sedit ~/.my.cnf
+		sudo nano ~/.my.cnf
 	else
 		echo "Error: my.cnf file could not be found."
 		echo "Searching for possible locations:"
@@ -529,59 +504,37 @@ mysqlconfig() {
 	fi
 }
 
-
 # Trim leading and trailing spaces (for scripts)
-trim() {
+trim () {
 	local var=$*
-	var="${var#"${var%%[![:space:]]*}"}" # remove leading whitespace characters
-	var="${var%"${var##*[![:space:]]}"}" # remove trailing whitespace characters
+	var="${var#"${var%%[![:space:]]*}"}"  # remove leading whitespace characters
+	var="${var%"${var##*[![:space:]]}"}"  # remove trailing whitespace characters
 	echo -n "$var"
 }
-# GitHub Titus Additions
 
+# GitHub Titus Additions
 gcom() {
 	git add .
 	git commit -m "$1"
 }
+
 lazyg() {
-	git add .
-	git commit -m "$1"
+	gcom()
 	git push
-}
-
-function hb {
-    if [ $# -eq 0 ]; then
-        echo "No file path specified."
-        return
-    elif [ ! -f "$1" ]; then
-        echo "File path does not exist."
-        return
-    fi
-
-    uri="http://bin.christitus.com/documents"
-    response=$(curl -s -X POST -d "$(cat "$1")" "$uri")
-    if [ $? -eq 0 ]; then
-        hasteKey=$(echo $response | jq -r '.key')
-        echo "http://bin.christitus.com/$hasteKey"
-    else
-        echo "Failed to upload the document."
-    fi
 }
 
 #######################################################
 # Set the ultimate amazing command prompt
 #######################################################
-
-alias hug="hugo server -F --bind=10.0.0.97 --baseURL=http://10.0.0.97"
+# Start fzf with 'Ctrl + f'
 bind '"\C-f":"zi\n"'
 
+# Modifies the PATH environment variable to include additional directories where executable binaries are located
 export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin"
 
-# Install Starship - curl -sS https://starship.rs/install.sh | sh
-
-# Don't use starship if the session is a remote connection (avoids tty connections looking scuffed)
+# Skips starship initilization if the session is a remote connection (avoids tty connections looking scuffed)
 if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" && -z "$SERIAL_CONSOLE_CONNECTION" && -z "$CONTAINER_SHELL_CONNECTION" ]]; then
-    eval "$(starship init zsh)"
+    eval "$(starship init bash)"
 fi
 eval "$(thefuck --alias)"
 eval "$(zoxide init bash)"
