@@ -103,7 +103,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Edit this .bashrc file
-alias ebrc='edit ~/.bashrc'
+alias ebrc='sudo nano ~/.bashrc'
 
 # alias to show the date
 alias da='date "+%Y-%m-%d %A %T %Z"'
@@ -300,14 +300,8 @@ cd () {
 	fi
 }
 
-# Returns the last 2 fields of the working directory
-pwdtail () {
-	pwd|awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
-}
-
 # Show the current distribution
-distribution ()
-{
+distribution () {
 	local dtype="unknown"  # Default to unknown
 
 	# Use /etc/os-release for modern distro identification
@@ -426,8 +420,7 @@ install_bashrc_support() {
 
 # IP address lookup
 alias whatismyip="whatsmyip"
-function whatsmyip ()
-{
+function whatsmyip () {
 	# Internal IP Lookup.
 	if [ -e /sbin/ip ]; then
 		echo -n "Internal IP: "
@@ -519,12 +512,13 @@ gcom() {
 }
 
 lazyg() {
-	gcom()
+	git add .
+	git commit -m "$1"
 	git push
 }
 
 #######################################################
-# Set the ultimate amazing command prompt
+# INITIALIZATION
 #######################################################
 # Start fzf with 'Ctrl + f'
 bind '"\C-f":"zi\n"'
