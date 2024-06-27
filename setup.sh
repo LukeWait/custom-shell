@@ -89,11 +89,11 @@ installDepend() {
             mkdir -p ~/.config
             
             sudo apt install -yq nala
-            sudo nala install -yq ${DEPENDENCIES}
-            sudo nala update -yq
+            sudo nala install ${DEPENDENCIES}
+            sudo nala update
 
             # Install python/pip
-            sudo nala install -yq python3-dev python3-pip python3-setuptools
+            sudo nala install python3-dev python3-pip python3-setuptools
 
             # Update tldr pages
             tldr -u
@@ -103,7 +103,7 @@ installDepend() {
             # Download the latest fastfetch deb file
             curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
             # Install the downloaded deb file using nala
-            sudo nala install -yq /tmp/fastfetch_latest_amd64.deb
+            sudo nala install /tmp/fastfetch_latest_amd64.deb
             ;;
         zypper)
             sudo zypper install -y ${DEPENDENCIES}
