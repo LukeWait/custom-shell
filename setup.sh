@@ -5,21 +5,21 @@ RED='\e[31m'
 YELLOW='\e[33m'
 GREEN='\e[32m'
 
-# Checks if a command exists in the system.
+# Checks if a command exists in the system
 command_exists() {
     command -v $1 >/dev/null 2>&1
 }
 
-# Checks the environment for required tools and permissions.
+# Checks the environment for required tools and permissions
 checkEnv() {
-    ## Check for requirements.
+    # Check for requirements
     REQUIREMENTS='curl groups sudo'
     if ! command_exists ${REQUIREMENTS}; then
         echo -e "${RED}To run me, you need: ${REQUIREMENTS}${RC}"
         exit 1
     fi
 
-    ## Check package handler.
+    # Check package handler
     PACKAGEMANAGER='apt yum dnf pacman zypper'
     for pgm in ${PACKAGEMANAGER}; do
         if command_exists ${pgm}; then
@@ -33,14 +33,14 @@ checkEnv() {
         exit 1
     fi
 
-    ## Check if the current directory is writable.
+    # Check if the current directory is writable.
     GITPATH="$(dirname "$(realpath "$0")")"
     if [[ ! -w ${GITPATH} ]]; then
         echo -e "${RED}Can't write to ${GITPATH}${RC}"
         exit 1
     fi
 
-    ## Check superuser group
+    # Check superuser group.
     SUPERUSERGROUP='wheel sudo root'
     for sug in ${SUPERUSERGROUP}; do
         if groups | grep ${sug}; then
@@ -49,16 +49,15 @@ checkEnv() {
         fi
     done
 
-    ## Check if member of the sudo group.
+    # Check if member of the sudo group.
     if ! groups | grep ${SUGROUP} >/dev/null; then
         echo -e "${RED}You need to be a member of the sudo group to run me!"
         exit 1
     fi
 }
 
-# Installs required dependencies based on the detected package manager.
+# Installs required dependencies based on the detected package manager
 installDepend() {
-    ## Check for dependencies.
     DEPENDENCIES='bash bash-completion tar tree multitail tldr trash-cli fzf btop bat thefuck'
     echo -e "${YELLOW}Installing dependencies...${RC}"
 
@@ -85,7 +84,6 @@ installDepend() {
             sudo pacman -S thefuck
             ;;
         apt)
-            # Just incase they aren't there (tty)
             mkdir -p ~/.local/share
             mkdir -p ~/.config
             
@@ -98,9 +96,8 @@ installDepend() {
             # Update tldr pages
             y | tldr -u
 
-            # Fetch the latest fastfetch release URL for linux-amd64 deb file
-            FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
             # Download the latest fastfetch deb file and install
+            FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
             curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
             sudo apt-get install -yq /tmp/fastfetch_latest_amd64.deb
             ;;
@@ -122,7 +119,7 @@ installDepend() {
     esac
 }
 
-# Installs Starship prompt if not already installed.
+# Installs Starship prompt if not already installed
 installStarship() {
     if command_exists starship; then
         echo "Starship already installed"
@@ -134,11 +131,11 @@ installStarship() {
         exit 1
     fi
 
-    ## Add nerd fonts for compatability with Starship icons only if supported.
-    if ! tty -s; then
+    # Add nerd fonts for compatability with Starship icons only if supported by terminal
+    if [[ "$TERM" =~ "256color" ]]; then
         mkdir -p ~/.local/share/fonts
 
-        # Add the FiraCode Nerd Font to the fonts directory.
+        # Add the FiraCode Nerd Font to the fonts directory
         wget -O ~/.local/share/fonts/FiraCode.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
         unzip ~/.local/share/fonts/FiraCode.zip -d ~/.local/share/fonts
         rm ~/.local/share/fonts/FiraCode.zip
@@ -147,7 +144,7 @@ installStarship() {
     fi
 }
 
-# Installs Zoxide if not already installed.
+# Installs Zoxide if not already installed
 installZoxide() {
     if command_exists zoxide; then
         echo "Zoxide already installed"
@@ -160,12 +157,11 @@ installZoxide() {
     fi
 }
 
-# Links the config files to the user's home directory based on detected shell.
+# Links the config files to the user's home directory based on detected shell
 linkConfig() {
-    ## Get the correct user home directory.
     USER_HOME=$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)
 
-    ## Determine which shell is in use and check if a configuration file already exists
+    # Determine which shell is in use and check if a config file already exists
     SHELL_TYPE=$(basename "$SHELL")
     case $SHELL_TYPE in
         bash)
@@ -180,14 +176,14 @@ linkConfig() {
             ;;
     esac
 
-    ## Determine the starship configuration file based on terminal type
-    if tty -s; then
-        STARSHIP_CONFIG="starship_tty.toml"
-    else
+    # Determine the starship config file to use based on terminal type
+    if [[ "$TERM" =~ "256color" ]]; then
         STARSHIP_CONFIG="starship.toml"
+    else
+        STARSHIP_CONFIG="starship_cli.toml"
     fi
 
-    ## Check if the old configuration file exists and move it if necessary
+    # Check if the old config file exists and move/backup if necessary
     OLD_CONFIG="${USER_HOME}/${SHELL_CONFIG}"
     if [[ -e "${OLD_CONFIG}" ]]; then
         echo -e "${YELLOW}Moving old ${SHELL_CONFIG} to ${USER_HOME}/${SHELL_CONFIG}.bak${RC}"
@@ -197,7 +193,7 @@ linkConfig() {
         fi
     fi
 
-    ## Link the new configuration files
+    # Link the new config files
     echo -e "${YELLOW}Linking new configuration files...${RC}"
     ln -svf "${GITPATH}/${SHELL_CONFIG}" "${USER_HOME}/${SHELL_CONFIG}"
     ln -svf "${GITPATH}/${STARSHIP_CONFIG}" "${USER_HOME}/.config/starship.toml"
