@@ -30,6 +30,7 @@ git | py venv | languages | docker >
 - [Installation](#installation)
 - [Usage](#usage)
 - [Development](#development)
+- [Testing](#testing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 - [Source Code](#source-code)
@@ -65,9 +66,9 @@ Not currently supported - maybe in the future.
    Install more Nerd Fonts by visiting [https://www.nerdfonts.com/] and extracting the download into the above directory.
 
 ## Usage
-Describe alias's and functions.
+Describe alias's and functions/how to utilize.
 
-Describe packages:
+Basic description of packages:
 - starship/modifying .toml
 - zoxide and navigation (aliased to ls and key binding for 'ctrl + f' for searching)
 - fzf (utilized by zoxide): A command-line fuzzy finder.
@@ -80,15 +81,22 @@ Describe packages:
 - fastfetch: A tool to display system information in a fast and minimal way
 
 ## Development
-Work in progress. Things to do:
-### setup.sh
-- Add dependencies for non debian and test
+- How to customize starship
+- Modifying setup.sh
+- Modifying bashrc/zshrc
 
-### .bashrc
-- Include .zshrc file based on .bashrc
+## Testing
+This setup has been tested and is fully functional in the following environments:
+- **Advanced Terminal:**
+  - Kali 2024 using bash
 
-### starship.toml
-- Add some additional palettes
+- **Basic Terminal/CLI Environment:**
+  - Ubuntu 22.04 using bash
+
+### Work in progress:
+- Add dependencies in setup.sh for non debian and test
+- Create .zshrc file based on .bashrc
+- Add some additional palettes and customizable options to starship.toml
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
@@ -102,3 +110,5 @@ Sourced alias's and scripts by zachbrowne.me
 The source code for this project can be found in the GitHub repository: [https://github.com/LukeWait/custom-shell](https://www.github.com/LukeWait/custom-shell).
 
 ## Dependencies
+- Linux operating system
+- Bash or Zsh shell
