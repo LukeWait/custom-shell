@@ -17,13 +17,13 @@ git | py venv | languages | docker >
   <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-git-venv.png" alt="App Screenshot" width="800">
 </p>
 
-### Example Starship Prompt Appearance for TTY
+### Example Starship Prompt Appearance for Basic Terminal (CLI environment)
 <p align="center">
-  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-tty-home.png" alt="App Screenshot" width="800">
+  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-cli-home.png" alt="App Screenshot" width="800">
 </p>
 
 <p align="center">
-  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-tty-git-venv.png" alt="App Screenshot" width="800">
+  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-cli-git-venv.png" alt="App Screenshot" width="800">
 </p>
 
 ## Table of Contents
@@ -57,13 +57,8 @@ Not currently supported - maybe in the future.
 ## Development
 Work in progress. Things to do:
 ### setup.sh
-- Add worthwhile packages
-- Add nerd font dl/install (firacode for default)
 
 ### .bashrc
-- Review aliases and adjust
-- Remove all existence of vim from this world
-- Ensure added packages are loaded as necessary
 - Include .zshrc file based on .bashrc
 
 ### starship.toml
