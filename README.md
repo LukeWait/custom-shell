@@ -3,10 +3,10 @@
 Customized bash functionality and appearance.
 
 2 line format:
-
-username@host | ip | dir |
-
-git | py venv | languages | docker >
+    ```sh
+    username@host | ip | dir |
+    git | py venv | languages | docker >
+    ```
 
 ### Example Starship Prompt Appearance
 <p align="center">
@@ -57,15 +57,16 @@ Not currently supported - maybe in the future.
    source ~/.bashrc # or ~/.zshrc depending on which shell your using
    ```
 
-##### The following step is not supported by basic terminal/cli environments
-4. Change the default font for your terminal to a nerd font, FiraCode nerd font has been installed as part of setup.sh:
+4. Change the default font for your terminal to a Nerd Font. The FiraCode Nerd Font has been installed as part of setup.sh at:
    ```sh
    ~/.local/share/fonts/FiraCode
    ```
-   You can install more by visiting [https://www.nerdfonts.com/] and extracting the downloaded fonts into the above directory.
+   Note: Basic terminals/cli environments will not support Nerd Fonts and as such, won't be installed by setup.sh.
+   Install more Nerd Fonts by visiting [https://www.nerdfonts.com/] and extracting the download into the above directory.
 
 ## Usage
 Describe alias's and functions.
+
 Describe packages:
 - starship/modifying .toml
 - zoxide and navigation (aliased to ls and key binding for 'ctrl + f' for searching)
@@ -94,6 +95,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ## Acknowledgments
 Modified verison of christitustech's mybash: https://github.com/ChrisTitusTech/mybash
+
 Sourced alias's and scripts by zachbrowne.me
 
 ## Source Code
