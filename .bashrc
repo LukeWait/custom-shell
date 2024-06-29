@@ -2,7 +2,7 @@
 iatest=$(expr index "$-" i)
 
 #######################################################
-# SOURCED ALIAS'S AND SCRIPTS BY zachbrowne.me
+# SYSTEM CONFIG
 #######################################################
 if [ -f /usr/bin/fastfetch ]; then
 	fastfetch
@@ -82,24 +82,11 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 #######################################################
-# MACHINE SPECIFIC ALIAS'S
-#######################################################
-
-# Alias's for SSH
-# alias SERVERNAME='ssh YOURWEBSITE.com -l USERNAME -p PORTNUMBERHERE'
-
-# Alias's to mount ISO files
-# mount -o loop /home/NAMEOFISO.iso /home/ISOMOUNTDIR/
-# umount /home/NAMEOFISO.iso
-# (Both commands done as root only.)
-
-#######################################################
-# GENERAL ALIAS'S
+# ALIAS'S
 #######################################################
 # To temporarily bypass an alias, precede the command with a '\'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
+# Alert alias for long running commands.  Use like so: 'sleep 10; alert'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Edit this .bashrc file
@@ -129,8 +116,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias bd='cd "$OLDPWD"'
-
-# Alias's to change the directory
 alias web='cd /var/www/html'
 
 # Remove a directory and all files
@@ -209,7 +194,7 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 alias kssh="kitty +kitten ssh"
 
 #######################################################
-# SPECIAL FUNCTIONS
+# FUNCTIONS
 #######################################################
 # Extracts any archive(s) (if unp isn't installed)
 extract() {
@@ -237,11 +222,7 @@ extract() {
 
 # Searches for text in all files in the current folder
 ftext () {
-	# -i case-insensitive
-	# -I ignore binary files
-	# -H causes filename to be printed
-	# -r recursive search
-	# -n causes line number to be printed
+	# -i case-insensitivem, -I ignore binary files, -H causes filename to be printed, -r recursive search, -n causes line number to be printed
 	# optional: -F treat search term as a literal, not a regular expression
 	# optional: -l only print filenames and not the matching lines ex. grep -irl "$1" *
 	grep -iIHrn --color=always "$1" . | less -r
@@ -302,9 +283,8 @@ cd () {
 
 # Show the current distribution
 distribution () {
-	local dtype="unknown"  # Default to unknown
+	local dtype="unknown"
 
-	# Use /etc/os-release for modern distro identification
 	if [ -r /etc/os-release ]; then
 		source /etc/os-release
 		case $ID in
@@ -327,7 +307,6 @@ distribution () {
 				dtype="slackware"
 				;;
 			*)
-				# If ID is not recognized, keep dtype as unknown
 				;;
 		esac
 	fi
@@ -375,7 +354,7 @@ ver() {
 	esac
 }
 
-# Automatically install the needed support files for this .bashrc file
+# Install the needed support files for this .bashrc file
 install_bashrc_support() {
 	local dtype
 	dtype=$(distribution)
@@ -388,8 +367,7 @@ install_bashrc_support() {
 			sudo zypper install multitail tree zoxide trash-cli fzf bash-completion fastfetch
 			;;
 		"debian")
-			# Just incase they aren't there (tty)
-            mkdir -p ~/.local/share
+			mkdir -p ~/.local/share
             mkdir -p ~/.config
             
             sudo apt install -yq ${DEPENDENCIES}
@@ -401,9 +379,8 @@ install_bashrc_support() {
             # Update tldr pages
             y | tldr -u
 
-            # Fetch the latest fastfetch release URL for linux-amd64 deb file
-            FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
             # Download the latest fastfetch deb file and install
+            FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
             curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
             sudo apt-get install -yq /tmp/fastfetch_latest_amd64.deb
 			;;
@@ -419,10 +396,9 @@ install_bashrc_support() {
 	esac
 }
 
-# IP address lookup
+# Private and public IP address lookup
 alias whatismyip="whatsmyip"
 function whatsmyip () {
-	# Internal IP Lookup.
 	if [ -e /sbin/ip ]; then
 		echo -n "Internal IP: "
 		/sbin/ip addr show wlan0 | grep "inet " | awk -F: '{print $1}' | awk '{print $2}'
@@ -431,7 +407,6 @@ function whatsmyip () {
 		/sbin/ifconfig wlan0 | grep "inet " | awk -F: '{print $1} |' | awk '{print $2}'
 	fi
 
-	# External IP Lookup
 	echo -n "External IP: "
 	curl -s ifconfig.me
 }
@@ -445,7 +420,7 @@ apachelog() {
 	fi
 }
 
-# Edit the Apache configuration
+# Edit the Apache configuration file
 apacheconfig() {
 	if [ -f /etc/httpd/conf/httpd.conf ]; then
 		sudo nano /etc/httpd/conf/httpd.conf
@@ -498,15 +473,15 @@ mysqlconfig() {
 	fi
 }
 
-# Trim leading and trailing spaces (for scripts)
+# Trim leading and trailing spaces
 trim () {
 	local var=$*
-	var="${var#"${var%%[![:space:]]*}"}"  # remove leading whitespace characters
-	var="${var%"${var##*[![:space:]]}"}"  # remove trailing whitespace characters
+	var="${var#"${var%%[![:space:]]*}"}"
+	var="${var%"${var##*[![:space:]]}"}"
 	echo -n "$var"
 }
 
-# GitHub Titus Additions
+# Easy GitHub commits
 gcom() {
 	git add .
 	git commit -m "$1"
@@ -527,7 +502,7 @@ bind '"\C-f":"zi\n"'
 # Modifies the PATH environment variable to include additional directories where executable binaries are located
 export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin"
 
-# Skips starship initilization if the session is a remote connection (avoids tty connections looking scuffed)
+# Skips starship initilization if the session is a remote connection (avoids basic terminal connections looking scuffed)
 if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" && -z "$SERIAL_CONSOLE_CONNECTION" && -z "$CONTAINER_SHELL_CONNECTION" ]]; then
     eval "$(starship init bash)"
 fi
