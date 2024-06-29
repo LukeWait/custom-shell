@@ -68,8 +68,8 @@ Work in progress. Things to do:
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Acknowledgments
-This is based on christitustech's mybash: https://github.com/ChrisTitusTech/mybash
-I'm using it as a learning tool and will be making my own modification to the scripts and config files along the way
+Modified verison of christitustech's mybash: https://github.com/ChrisTitusTech/mybash
+Sourced alias's and scripts by zachbrowne.me
 
 ## Source Code
 The source code for this project can be found in the GitHub repository: [https://github.com/LukeWait/custom-shell](https://www.github.com/LukeWait/custom-shell).
