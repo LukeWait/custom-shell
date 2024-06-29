@@ -81,7 +81,7 @@ Basic description of packages:
 - fastfetch: A tool to display system information in a fast and minimal way
 
 ## Development
-- How to customize starship
+- How to customize starship: (https://starship.rs/guide/)
 - Modifying setup.sh
 - Modifying bashrc/zshrc
 
