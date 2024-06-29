@@ -10,20 +10,20 @@ git | py venv | languages | docker >
 
 ### Example Starship Prompt Appearance
 <p align="center">
-  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-home.png" alt="App Screenshot" width="800">
+  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-home.png" alt="App Screenshot" width="700">
 </p>
 
 <p align="center">
-  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-git-venv.png" alt="App Screenshot" width="800">
+  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-git-venv.png" alt="App Screenshot" width="700">
 </p>
 
 ### Example Starship Prompt Appearance for Basic Terminal (CLI environment)
 <p align="center">
-  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-cli-home.png" alt="App Screenshot" width="800">
+  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-cli-home.png" alt="App Screenshot" width="700">
 </p>
 
 <p align="center">
-  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-cli-git-venv.png" alt="App Screenshot" width="800">
+  <img src="https://github.com/LukeWait/custom-shell/raw/main/screenshots/starship-cli-git-venv.png" alt="App Screenshot" width="700">
 </p>
 
 ## Table of Contents
