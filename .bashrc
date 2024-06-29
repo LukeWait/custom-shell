@@ -92,7 +92,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Edit this .bashrc file
 alias ebrc='sudo nano ~/.bashrc'
 
-# alias to show the date
+# Alias to show the date
 alias da='date "+%Y-%m-%d %A %T %Z"'
 
 # Alias's to modified commands
@@ -137,7 +137,7 @@ alias labc='ls -lap' #alphabetical sort
 alias lf="ls -l | egrep -v '^d'" # files only
 alias ldir="ls -l | egrep '^d'" # directories only
 
-# alias chmod commands
+# Alias chmod commands
 alias mx='chmod a+x'
 alias 000='chmod -R 000'
 alias 644='chmod -R 644'
