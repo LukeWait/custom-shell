@@ -133,7 +133,7 @@ Windows = "󰍲 "
 show_always = true
 style_user = "bg:color_user_git fg:color_text"
 style_root = "bg:color_user_git fg:bold red"
-format = '[ $user]($style)'
+format = '[$user]($style)'
 disabled = false
 
 [hostname]
