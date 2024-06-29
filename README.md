@@ -63,7 +63,7 @@ Not currently supported - maybe in the future.
    ~/.local/share/fonts/FiraCode
    ```
    Note: Basic terminals/cli environments will not support Nerd Fonts and as such, won't be installed by setup.sh.
-   Install more Nerd Fonts by visiting [https://www.nerdfonts.com/] and extracting the download into the above directory.
+   Install more Nerd Fonts by visiting https://www.nerdfonts.com/ and extracting the download into the above directory.
 
 ## Usage
 Describe alias's and functions/how to utilize.
@@ -81,7 +81,7 @@ Basic description of packages:
 - fastfetch: A tool to display system information in a fast and minimal way
 
 ## Development
-- How to customize starship: (https://starship.rs/guide/)
+- How to customize starship: https://starship.rs/guide/
 - Modifying setup.sh
 - Modifying bashrc/zshrc
 
