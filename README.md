@@ -3,10 +3,10 @@
 Customized bash functionality and appearance.
 
 2 line format:
-    ```sh
-    username@host | ip | dir |
-    git | py venv | languages | docker >
-    ```
+```sh
+username@host | ip | dir |
+git | py venv | languages | docker >
+```
 
 ### Example Starship Prompt Appearance
 <p align="center">
