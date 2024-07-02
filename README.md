@@ -1,6 +1,6 @@
 # Custom Shell for Linux
 ## Description
-Enhances Linux environments with the Starship customizable prompt, personalized aliases for lazy people, and essential packages. The packages chosen have been selected to enhance navigation and provide a user-friendly experience that for the most part are integrated seemlessly into everyday use through the use of alias and functions. Details on the packages are outlined in the [Usage](#usage) section.
+Enhances Linux environments with the Starship customizable prompt, personalized aliases for lazy people, and essential packages. The packages chosen have been selected to enhance navigation and provide a user-friendly experience that, for the most part, are integrated seamlessly into everyday use through the use of alias and functions. Details on the packages are outlined in the [Usage](#usage) section.
 
 The default configuration features a two-line prompt format as follows:
    ```sh
