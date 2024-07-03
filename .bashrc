@@ -274,11 +274,11 @@ mkdirg () {
 
 # Alias cd to zoxide and automatically do ls
 cd () {
-	if [ -n "$1" ]; then
-		z "$@" && ls
-	else
-		z ~ && ls
-	fi
+        if [ -n "$1" ]; then
+                z "$@" && command ls -Fh --color=always
+        else
+                z ~ && command ls -Fh --color=always
+        fi
 }
 
 # Show the current distribution
