@@ -82,7 +82,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 #######################################################
-# ALIAS'S
+# ALIASES
 #######################################################
 # To temporarily bypass an alias, precede the command with a '\'
 
@@ -95,7 +95,7 @@ alias ebrc='sudo nano ~/.bashrc'
 # Alias to show the date
 alias da='date "+%Y-%m-%d %A %T %Z"'
 
-# Alias's to modified commands
+# Aliases to modified commands
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='trash -v'
@@ -121,7 +121,7 @@ alias web='cd /var/www/html'
 # Remove a directory and all files
 alias rmd='/bin/rm  --recursive --force --verbose '
 
-# Alias's for multiple directory listing commands
+# Aliases for multiple directory listing commands
 alias la='ls -Alh' # show hidden files
 alias ls='ls -aFh --color=always' # add colors and file type extensions
 alias lx='ls -lXBh' # sort by extension
@@ -161,11 +161,11 @@ alias countfiles="for t in files links directories; do echo \`find . -type \${t:
 # Show open ports
 alias openports='netstat -nape --inet'
 
-# Alias's for safe and forced reboots
+# Aliases for safe and forced reboots
 alias rebootsafe='sudo shutdown -r now'
 alias rebootforce='sudo shutdown -r -n now'
 
-# Alias's to show disk space and space used in a folder
+# Aliases to show disk space and space used in a folder
 alias diskspace="du -S | sort -n -r |more"
 alias folders='du -h --max-depth=1'
 alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
@@ -173,7 +173,7 @@ alias tree='tree -CAhF --dirsfirst'
 alias treed='tree -CAFd'
 alias mountedinfo='df -hT'
 
-# Alias's for archives
+# Aliases for archives
 alias mktar='tar -cvf'
 alias mkbz2='tar -cvjf'
 alias mkgz='tar -cvzf'
@@ -272,7 +272,7 @@ mkdirg () {
 	cd "$1"
 }
 
-# Alias cd to z and automatically do ls
+# Alias cd to zoxide and automatically do ls
 cd () {
 	if [ -n "$1" ]; then
 		z "$@" && ls
@@ -356,44 +356,64 @@ ver() {
 
 # Install the needed support files for this .bashrc file
 install_bashrc_support() {
-	local dtype
-	dtype=$(distribution)
+    DEPENDENCIES='multitail tree zoxide trash-cli fzf bash-completion'
+    PYTHONSTUFF='python3-dev python3-pip python3-setuptools' # Required for tldr/thefuck
 
-	case $dtype in
-		"redhat")
-			sudo yum install multitail tree zoxide trash-cli fzf bash-completion fastfetch
-			;;
-		"suse")
-			sudo zypper install multitail tree zoxide trash-cli fzf bash-completion fastfetch
-			;;
-		"debian")
-			mkdir -p ~/.local/share
-            mkdir -p ~/.config
-            
-            sudo apt install -yq ${DEPENDENCIES}
+    # Make sure these directories exist or some packages may not function/install correctly
+    mkdir -p ~/.local/share
+    mkdir -p ~/.config
+
+    local dtype
+    dtype=$(distribution)
+
+    case $dtype in
+        "redhat")
+            sudo yum check-update
+            sudo yum install -y ${DEPENDENCIES} ${PYTHONSTUFF} fastfetch
+            ;;
+        "suse")
+            sudo zypper refresh
+            sudo zypper install -y ${DEPENDENCIES} ${PYTHONSTUFF} fastfetch
+            ;;
+        "debian")
             sudo apt update -yq
-
-            # Install python/pip
-            sudo apt install -yq python3-dev python3-pip python3-setuptools
-
-            # Update tldr pages
-            y | tldr -u
+            sudo apt install -yq ${DEPENDENCIES} ${PYTHONSTUFF}
 
             # Download the latest fastfetch deb file and install
             FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
             curl -sL $FASTFETCH_URL -o /tmp/fastfetch_latest_amd64.deb
             sudo apt-get install -yq /tmp/fastfetch_latest_amd64.deb
-			;;
-		"arch")
-			sudo paru multitail tree zoxide trash-cli fzf bash-completion fastfetch
-			;;
-		"slackware")
-			echo "No install support for Slackware"
-			;;
-		*)
-			echo "Unknown distribution"
-			;;
-	esac
+            ;;
+        "arch")
+            sudo pacman -Syu
+            if ! command_exists yay && ! command_exists paru; then
+                echo "Installing yay as AUR helper..."
+                sudo pacman --noconfirm -S base-devel
+                cd /opt && sudo git clone https://aur.archlinux.org/yay-git.git && sudo chown -R ${USER}:${USER} ./yay-git
+                cd yay-git && makepkg --noconfirm -si
+            else
+                echo "AUR helper already installed"
+            fi
+            if command_exists yay; then
+                AUR_HELPER="yay"
+            elif command_exists paru; then
+                AUR_HELPER="paru"
+            else
+                echo "No AUR helper found. Please install yay or paru."
+                return 1
+            fi
+            ${AUR_HELPER} --noconfirm -S ${DEPENDENCIES} ${PYTHONSTUFF} fastfetch
+            ;;
+        "slackware")
+            echo "No install support for Slackware"
+            ;;
+        *)
+            echo "Unknown distribution"
+            ;;
+    esac
+
+    # Update tldr pages
+    y | tldr -u
 }
 
 # Private and public IP address lookup

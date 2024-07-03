@@ -59,10 +59,16 @@ checkEnv() {
 # Installs required dependencies based on the detected package manager
 installDepend() {
     DEPENDENCIES='bash bash-completion tar tree multitail tldr trash-cli fzf btop bat thefuck'
+    PYTHONSTUFF='python3-dev python3-pip python3-setuptools' # Required for tldr/thefuck
     echo -e "${YELLOW}Installing dependencies...${RC}"
+
+    # Make sure these directories exist or some packages may not function/install correctly
+    mkdir -p ~/.local/share
+    mkdir -p ~/.config
 
     case $PACKAGER in
         pacman)
+            sudo pacman -Syu
             if ! command_exists yay && ! command_exists paru; then
                 echo "Installing yay as AUR helper..."
                 sudo pacman --noconfirm -S base-devel
@@ -79,22 +85,12 @@ installDepend() {
                 echo "No AUR helper found. Please install yay or paru."
                 exit 1
             fi
-            ${AUR_HELPER} --noconfirm -S ${DEPENDENCIES}
+            ${AUR_HELPER} --noconfirm -S ${DEPENDENCIES} ${PYTHONSTUFF} fastfetch
             sudo pacman -Syu
-            sudo pacman -S thefuck
             ;;
         apt)
-            mkdir -p ~/.local/share
-            mkdir -p ~/.config
-            
-            sudo apt install -yq ${DEPENDENCIES}
             sudo apt update -yq
-
-            # Install python/pip
-            sudo apt install -yq python3-dev python3-pip python3-setuptools
-
-            # Update tldr pages
-            y | tldr -u
+            sudo apt install -yq ${DEPENDENCIES} ${PYTHONSTUFF}
 
             # Download the latest fastfetch deb file and install
             FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-amd64.deb" | cut -d '"' -f 4)
@@ -102,21 +98,25 @@ installDepend() {
             sudo apt-get install -yq /tmp/fastfetch_latest_amd64.deb
             ;;
         zypper)
-            sudo zypper install -y ${DEPENDENCIES}
             sudo zypper refresh
+            sudo zypper install -y ${DEPENDENCIES} ${PYTHONSTUFF} fastfetch
             ;;
         dnf)
-            sudo dnf install -y ${DEPENDENCIES}
             sudo dnf check-update
+            sudo dnf install -y ${DEPENDENCIES} ${PYTHONSTUFF} fastfetch
             ;;
         yum)
-            sudo yum install -y ${DEPENDENCIES}
+            sudo yum check-update
+            sudo yum install -y ${DEPENDENCIES} ${PYTHONSTUFF} fastfetch
             ;;
         *)
             echo "No supported package manager found. Please install packages manually."
             exit 1
             ;;
     esac
+
+    # Update tldr pages
+    y | tldr -u
 }
 
 # Installs Starship prompt if not already installed
@@ -167,9 +167,9 @@ linkConfig() {
         bash)
             SHELL_CONFIG=".bashrc"
             ;;
-        zsh)
-            SHELL_CONFIG=".zshrc"
-            ;;
+        #zsh)
+        #    SHELL_CONFIG=".zshrc"
+        #    ;;
         *)
             echo -e "${RED}Unsupported shell: $SHELL_TYPE${RC}"
             exit 1
