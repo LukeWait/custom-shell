@@ -96,7 +96,7 @@ The `setup.sh` file will not work with Windows however you can take advantage of
    ```
 
 6. Lastly, configure the Command Prompt and PowerShell windows to use a Nerd Font:
-   - Right click on taskbar of Command Prompt and choose Settings\Profile\Command Prompt/PowerShell. Scroll to the bottom and click Appearance and then change the font face to a Nerd Font.
+   - Right click on taskbar of Command Prompt and choose Settings\Profiles\Defaults. Scroll to the bottom and click Appearance and then change the font face to a Nerd Font.
    - Admin versions of need to be addressed individually, open an admin Command Prompt/PowerShell and right click on taskbar and choose Properties\Font and then choose a Nerd Font.
 
 ## Usage
