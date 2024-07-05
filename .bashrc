@@ -13,13 +13,6 @@ if [ -f /etc/bashrc ]; then
 	 . /etc/bashrc
 fi
 
-# Enable bash programmable completion features in interactive shells
-if [ -f /usr/share/bash-completion/bash_completion ]; then
-	. /usr/share/bash-completion/bash_completion
-elif [ -f /etc/bash_completion ]; then
-	. /etc/bash_completion
-fi
-
 #######################################################
 # EXPORTS
 #######################################################
@@ -87,7 +80,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # To temporarily bypass an alias, precede the command with a '\'
 
 # Alert alias for long running commands.  Use like so: 'sleep 10; alert'
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(command history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Edit this .bashrc file
 alias ebrc='sudo nano ~/.bashrc'
@@ -146,7 +139,7 @@ alias 755='chmod -R 755'
 alias 777='chmod -R 777'
 
 # Search command line history
-alias h="history | grep "
+alias h="command history | grep "
 
 # Search running processes
 alias p="ps aux | grep "
@@ -196,6 +189,11 @@ alias kssh="kitty +kitten ssh"
 #######################################################
 # FUNCTIONS
 #######################################################
+# Checks if a command exists in the system
+command_exists() {
+    command -v $1 >/dev/null 2>&1
+}
+
 # Extracts any archive(s) (if unp isn't installed)
 extract() {
 	for archive in "$@"; do
@@ -356,7 +354,7 @@ ver() {
 
 # Install the needed support files for this .bashrc file
 install_bashrc_support() {
-    DEPENDENCIES='multitail tree zoxide trash-cli fzf bash-completion'
+    DEPENDENCIES='multitail tree zoxide trash-cli fzf'
     PYTHONSTUFF='python3-dev python3-pip python3-setuptools' # Required for tldr/thefuck
 
     # Make sure these directories exist or some packages may not function/install correctly
@@ -414,6 +412,54 @@ install_bashrc_support() {
 
     # Update tldr pages
     y | tldr -u
+
+	# Install Starship prompt if not already installed
+    if ! command_exists starship; then
+        echo "Installing Starship..."
+        if ! curl -sS https://starship.rs/install.sh | sh; then
+            echo -e "${RED}Something went wrong during Starship install!${RC}"
+            exit 1
+        fi
+
+        # Add nerd fonts for compatibility with Starship icons only if supported by terminal
+        if [[ "$TERM" =~ "256color" ]]; then
+            mkdir -p ~/.local/share/fonts
+
+            # Add the FiraCode Nerd Font to the fonts directory
+            wget -O ~/.local/share/fonts/FiraCode.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+            unzip ~/.local/share/fonts/FiraCode.zip -d ~/.local/share/fonts
+            rm ~/.local/share/fonts/FiraCode.zip
+
+            fc-cache -fv
+        fi
+    else
+        echo "Starship is already installed"
+    fi
+
+    # Install Zoxide if not already installed
+    if ! command_exists zoxide; then
+        echo "Installing Zoxide..."
+        if ! curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh; then
+            echo -e "${RED}Something went wrong during Zoxide install!${RC}"
+            exit 1
+        fi
+    else
+        echo "Zoxide is already installed"
+    fi
+
+    # Install ble.sh if not already installed
+    if ! command_exists ble.sh; then
+        echo "Installing ble.sh..."
+        git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git /tmp/ble.sh
+        if command_exists make; then
+            make -C /tmp/ble.sh install PREFIX=~/.local
+        else
+            gmake -C /tmp/ble.sh install PREFIX=~/.local
+        fi
+        rm -rf /tmp/ble.sh
+    else
+        echo "ble.sh is already installed"
+    fi
 }
 
 # Private and public IP address lookup
@@ -528,3 +574,6 @@ if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" &&
 fi
 eval "$(thefuck --alias)"
 eval "$(zoxide init bash)"
+
+# Use that sweet auto-complete and suggestions
+source ~/.local/share/blesh/ble.sh

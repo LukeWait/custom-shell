@@ -157,6 +157,22 @@ installZoxide() {
     fi
 }
 
+# Installs ble.sh if not already installed
+installBlesh() {
+    if command_exists ble.sh; then
+        echo "ble.sh already installed"
+        return
+    fi
+
+    git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git /tmp/ble.sh
+    if command_exists make; then
+        make -C /tmp/ble.sh install PREFIX=~/.local
+    else
+        gmake -C /tmp/ble.sh install PREFIX=~/.local
+    fi
+    rm -rf /tmp/ble.sh
+}
+
 # Links the config files to the user's home directory based on detected shell
 linkConfig() {
     USER_HOME=$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)
@@ -204,4 +220,5 @@ checkEnv
 installDepend
 installStarship
 installZoxide
+installBlesh
 linkConfig
