@@ -220,5 +220,7 @@ checkEnv
 installDepend
 installStarship
 installZoxide
-installBlesh
+if [ -n "$BASH_VERSION" ]; then
+    installBlesh
+fi
 linkConfig

@@ -3,8 +3,8 @@
 Enhances Linux environments with the Starship customizable prompt for visual fanciness, personalized aliases for lazy people, and essential packages. The packages have been selected to enhance navigation and provide a user-friendly experience that, for the most part, seamlessly integrates into everyday use through the use of alias and functions. Further details on the packages and their functionality can be found in the [Usage](#usage) section.
 
 Installing is easy - the `setup.sh` file takes care of everything, including installing the dependencies and creating symbolic links to the included shell/Starship config files. The script will automatically detect the following and act accordingly: 
-- The Linux distribution in use is used to install dependencies based on the required syntax and package managers (as of v2.0.0, only apt has been tested)
-- The shell type in use will determine which shell config file to link (currently only .bashrc is provided however .zshrc is in the works).
+- The Linux distribution in use determines how to install dependencies based on the required syntax and package managers (as of v2.0.0, only apt has been tested)
+- The shell type in use determines which shell config file to link (currently only .bashrc is provided however .zshrc is in the works).
 - If you're using a basic terminal with limited color range/font choices it will link to an alternative Starship config that is tailored to these restrictions. It will also skip installation of a Nerd Font as it won't be supported.
 
 The default Starship config features a two-line prompt format as follows:
@@ -111,6 +111,15 @@ The `setup.sh` file will not work with Windows however you can take advantage of
   </p>
 </details>
 
+<details>
+  <summary style="font-weight: bold;">ble.sh</summary>
+  Bash Line Editor (ble.sh) is a command line editor written in pure Bash which replaces the default GNU Readline. It enhances the Bash shell experience by adding advanced features like auto-completion and syntax highlighting. 
+
+  https://github.com/akinomyoga/ble.sh
+  <p align="left">
+    <img src="https://i.sstatic.net/yyxPm.gif" alt="ble.sh Screeenshot" width="800">
+  </p>
+</details>
 
 <details>
   <summary style="font-weight: bold;">zoxide</summary>
@@ -302,6 +311,7 @@ The `setup.sh` file will not work with Windows however you can take advantage of
 <details>
   <summary style="font-weight: bold;">Functions</summary>
   <ul>
+    <li>command_exists() - Checks if a command exists in the system.</li>
     <li>extract() - Extract various types of archives (tar, gzip, bzip2, etc.) based on file extension.</li>
     <li>ftext() - Searche for text in all files in the current directory recursively, with case insensitivity and line numbering.</li>
     <li>cpp() - Copy files with a progress bar showing the completion percentage.</li>
@@ -337,10 +347,10 @@ The `setup.sh` file will not work with Windows however you can take advantage of
 - SYSTEM CONFIG: Fastfetch is set to automatically run whenever a new terminal is started - you can remove that functionality here.
 - EXPORTS: Here you can set the shell default settings such as preferred text editor. Everything is labelled so modify as you see fit.
 - ALIASES/FUNCTIONS: Again, everything is labelled so should be pretty straightforward.
-- INITIALIZATION: Here you can add/remove key bindings for keyboard shortcuts. Some packages such as Starship, zoxide, and thefuck require initilization when a shell is launched so ensure the `eval` statements for these packages remain intact unless you plan to remove them. I also disabled Starship on remote connections to avoid basic terminal connections looking like a mess of symbols.
+- INITIALIZATION: Here you can add/remove key bindings for keyboard shortcuts. Some packages such as Starship, zoxide, thefuck and bl.esh require initilization/referencing whenever a shell is launched so ensure the `eval` and `source` statements for these packages remain intact unless you plan to remove them.
 
 ## Testing
-Version v2.0.0 has been tested and is fully functional in the following environments:
+Version v2.1.0 has been tested and is fully functional in the following environments:
 - **Advanced Terminal:**
    - Kali 2024 using bash
 
