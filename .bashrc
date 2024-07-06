@@ -448,7 +448,7 @@ install_bashrc_support() {
     fi
 
     # Install ble.sh if not already installed
-    if ! command_exists ble.sh; then
+    if ! command_exists ble; then
         echo "Installing ble.sh..."
         git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git /tmp/ble.sh
         if command_exists make; then

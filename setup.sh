@@ -58,7 +58,7 @@ checkEnv() {
 
 # Installs required dependencies based on the detected package manager
 installDepend() {
-    DEPENDENCIES='bash bash-completion tar tree multitail tldr trash-cli fzf btop bat thefuck'
+    DEPENDENCIES='bash tar tree multitail tldr trash-cli fzf btop bat thefuck'
     PYTHONSTUFF='python3-dev python3-pip python3-setuptools' # Required for tldr/thefuck
     echo -e "${YELLOW}Installing dependencies...${RC}"
 
@@ -159,7 +159,7 @@ installZoxide() {
 
 # Installs ble.sh if not already installed
 installBlesh() {
-    if command_exists ble.sh; then
+    if command_exists ble; then
         echo "ble.sh already installed"
         return
     fi
