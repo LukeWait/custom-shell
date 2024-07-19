@@ -5,7 +5,7 @@ iatest=$(expr index "$-" i)
 # SYSTEM CONFIG
 #######################################################
 # Use that sweet auto-complete and suggestions - initialized at end of file
-[[ $- == *i* ]] && source /path/to/blesh/ble.sh --noattach
+[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh --noattach
 
 # Check for fastfetch and display on bash start
 if [ -f /usr/bin/fastfetch ]; then
