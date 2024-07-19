@@ -106,14 +106,14 @@ alias apt='sudo apt'
 alias apt-get='sudo apt-get'
 
 # Change directory aliases
-alias home='cd ~'
-alias cd..='cd ..'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias bd='cd "$OLDPWD"'
-alias web='cd /var/www/html'
+alias home='z ~'
+alias cd..='z ..'
+alias ..='z ..'
+alias ...='z ../..'
+alias ....='z ../../..'
+alias .....='z ../../../..'
+alias bd='z "$OLDPWD"'
+alias web='z /var/www/html'
 
 # Remove a directory and all files
 alias rmd='/bin/rm  --recursive --force --verbose '
@@ -572,14 +572,15 @@ bind '"\C-f":"zi\n"'
 # Modifies the PATH environment variable to include additional directories where executable binaries are located
 export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin"
 
-# Use that sweet auto-complete and suggestions - instantiated at start of file
-[[ ${BLE_VERSION-} ]] && ble-attach
-
-# Initializations
-eval "$(thefuck --alias)"
-eval "$(zoxide init bash)"
-
 # Skips starship initilization if the session is a remote connection (avoids basic terminal connections looking scuffed)
 if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" && -z "$SERIAL_CONSOLE_CONNECTION" && -z "$CONTAINER_SHELL_CONNECTION" ]]; then
     eval "$(starship init bash)"
 fi
+
+# Other initializations
+eval "$(thefuck --alias)"
+eval "$(zoxide init bash)"
+
+# Use that sweet auto-complete and suggestions - instantiated at start of file
+[[ ${BLE_VERSION-} ]] && ble-attach
+
