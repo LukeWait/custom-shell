@@ -4,10 +4,8 @@ iatest=$(expr index "$-" i)
 #######################################################
 # SYSTEM CONFIG
 #######################################################
-# Use that sweet auto-complete and suggestions
-if [ -f ~/.local/share/blesh/ble.sh ]; then
-    source ~/.local/share/blesh/ble.sh
-fi
+# Use that sweet auto-complete and suggestions - initialized at end of file
+[[ $- == *i* ]] && source /path/to/blesh/ble.sh --noattach
 
 # Check for fastfetch and display on bash start
 if [ -f /usr/bin/fastfetch ]; then
@@ -574,9 +572,14 @@ bind '"\C-f":"zi\n"'
 # Modifies the PATH environment variable to include additional directories where executable binaries are located
 export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin"
 
+# Use that sweet auto-complete and suggestions - instantiated at start of file
+[[ ${BLE_VERSION-} ]] && ble-attach
+
+# Initializations
+eval "$(thefuck --alias)"
+eval "$(zoxide init bash)"
+
 # Skips starship initilization if the session is a remote connection (avoids basic terminal connections looking scuffed)
 if [[ -z "$SSH_CONNECTION" && -z "$TELNET_CONNECTION" && -z "$RDP_CONNECTION" && -z "$SERIAL_CONSOLE_CONNECTION" && -z "$CONTAINER_SHELL_CONNECTION" ]]; then
     eval "$(starship init bash)"
 fi
-eval "$(thefuck --alias)"
-eval "$(zoxide init bash)"
