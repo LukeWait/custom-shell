@@ -106,14 +106,14 @@ alias apt='sudo apt'
 alias apt-get='sudo apt-get'
 
 # Change directory aliases
-alias home='z ~'
-alias cd..='z ..'
-alias ..='z ..'
-alias ...='z ../..'
-alias ....='z ../../..'
-alias .....='z ../../../..'
-alias bd='z "$OLDPWD"'
-alias web='z /var/www/html'
+alias home='cd ~'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias bd='cd "$OLDPWD"'
+alias web='cd /var/www/html'
 
 # Remove a directory and all files
 alias rmd='/bin/rm  --recursive --force --verbose '
