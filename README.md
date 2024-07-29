@@ -347,7 +347,7 @@ The `setup.sh` file will not work with Windows however you can take advantage of
 - SYSTEM CONFIG: Fastfetch is set to automatically run whenever a new terminal is started - you can remove that functionality here.
 - EXPORTS: Here you can set the shell default settings such as preferred text editor. Everything is labelled so modify as you see fit.
 - ALIASES/FUNCTIONS: Again, everything is labelled so should be pretty straightforward.
-- INITIALIZATION: Here you can add/remove key bindings for keyboard shortcuts. Some packages such as Starship, zoxide, thefuck and bl.esh require initilization/referencing whenever a shell is launched so ensure the `eval` and `source` statements for these packages remain intact unless you plan to remove them.
+- INITIALIZATION: Here you can add/remove key bindings for keyboard shortcuts. Some packages, such as Starship, zoxide, thefuck, and bl.esh, require initialization/referencing whenever a shell is launched. Ensure the `eval` statements for these packages remain intact unless you plan to remove them. As recommended on the bl.esh GitHub repo, it is first instantiated in the SYSTEM CONFIG section and is then initialized here.
 
 ## Testing
 Version v2.1.0 has been tested and is fully functional in the following environments:
